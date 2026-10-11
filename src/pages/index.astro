@@ -1,0 +1,244 @@
+---
+import Base from '../layouts/Base.astro';
+import AdUnit from '../components/AdUnit.astro';
+import Icon from '../components/Icon.astro';
+
+const title = 'Home';
+const description = 'Free pregnancy calculators and guides — gestational age, due dates, trimesters, milestones, and more. Your journey. Our guidance.';
+---
+
+<Base title={title} description={description}>
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-inner">
+      <div>
+        <span class="hero-badge">Trusted Pregnancy Tools</span>
+        <h1>Your journey.<br/>Our guidance.</h1>
+        <p class="hero-subtitle">Free pregnancy calculators and week-by-week guides — built with sourced clinical information, designed to support you at every step.</p>
+        <div class="hero-actions">
+          <a href="/gestational-age-calculator/" class="btn btn-primary">Calculate Your Dates</a>
+          <a href="/guides/" class="btn btn-secondary">Explore Guides</a>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <svg viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Illustration of a pregnant woman" style="max-width: 100%; height: auto;">
+          <!-- Background circle -->
+          <circle cx="200" cy="200" r="180" fill="#E6F7F3"/>
+          <circle cx="200" cy="200" r="160" fill="#F0FAF7"/>
+          
+          <!-- Decorative dots -->
+          <circle cx="80" cy="120" r="4" fill="#00B894" opacity="0.3"/>
+          <circle cx="320" cy="100" r="6" fill="#FFB7A7" opacity="0.4"/>
+          <circle cx="340" cy="280" r="5" fill="#00B894" opacity="0.25"/>
+          <circle cx="60" cy="300" r="3" fill="#FFB7A7" opacity="0.3"/>
+          <circle cx="100" cy="340" r="4" fill="#00B894" opacity="0.2"/>
+          <circle cx="300" cy="340" r="6" fill="#FFB7A7" opacity="0.25"/>
+          
+          <!-- Pregnant woman - continuous line style -->
+          <g stroke="#0B3D5B" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none">
+            <!-- Head -->
+            <circle cx="200" cy="80" r="28"/>
+            
+            <!-- Hair -->
+            <path d="M172 70 C172 55, 185 45, 200 45 C215 45, 228 55, 228 70"/>
+            <path d="M172 70 C168 85, 170 100, 175 110"/>
+            
+            <!-- Face profile -->
+            <path d="M200 52 L200 65"/>
+            <path d="M195 72 C197 74, 203 74, 205 72"/>
+            
+            <!-- Neck -->
+            <path d="M200 108 L200 125"/>
+            
+            <!-- Body - back -->
+            <path d="M200 125 C195 140, 190 160, 188 180 C186 200, 185 220, 188 240"/>
+            
+            <!-- Body - front with belly -->
+            <path d="M200 125 C210 140, 218 155, 225 170 C235 190, 245 210, 248 230 C250 250, 248 270, 240 285"/>
+            
+            <!-- Belly curve -->
+            <path d="M188 180 C185 200, 188 220, 195 235 C200 245, 210 250, 220 248 C230 245, 238 235, 240 220"/>
+            
+            <!-- Arm - back -->
+            <path d="M188 140 C180 155, 175 170, 178 185 C180 195, 185 200, 190 198"/>
+            
+            <!-- Arm - front reaching to belly -->
+            <path d="M225 140 C235 150, 245 160, 250 175 C255 190, 252 205, 245 210 C240 213, 235 210, 235 205"/>
+            
+            <!-- Hand on belly -->
+            <path d="M235 205 C238 208, 242 210, 245 208"/>
+            
+            <!-- Legs -->
+            <path d="M188 240 C185 260, 182 280, 180 300 C178 320, 180 340, 185 355"/>
+            <path d="M240 285 C242 305, 245 325, 248 345 C250 360, 248 375, 245 385"/>
+            
+            <!-- Feet -->
+            <path d="M185 355 L175 360"/>
+            <path d="M245 385 L240 390"/>
+          </g>
+          
+          <!-- Heart on belly -->
+          <path d="M215 220 C215 215, 220 212, 225 215 C230 212, 235 215, 235 220 C235 228, 225 235, 225 235 C225 235, 215 228, 215 220 Z" fill="#FFB7A7"/>
+          
+          <!-- Sparkles around -->
+          <g fill="#00B894">
+            <path d="M120 180 L122 185 L127 187 L122 189 L120 194 L118 189 L113 187 L118 185 Z" opacity="0.6"/>
+            <path d="M290 160 L292 165 L297 167 L292 169 L290 174 L288 169 L283 167 L288 165 Z" opacity="0.5"/>
+            <path d="M280 260 L282 265 L287 267 L282 269 L280 274 L278 269 L273 267 L278 265 Z" opacity="0.4"/>
+          </g>
+          
+          <!-- Ground line -->
+          <ellipse cx="215" cy="395" rx="80" ry="8" fill="#0B3D5B" opacity="0.08"/>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- Tools Section -->
+  <section class="section section-white">
+    <div class="section-inner">
+      <div class="section-header">
+        <h2>Pregnancy Calculators</h2>
+        <p>Fast, accurate tools that run in your browser. We never store your dates or personal information.</p>
+      </div>
+      <div class="card-grid">
+        <a href="/gestational-age-calculator/" class="card">
+          <div class="card-icon card-icon-mint"><Icon name="calendar" /></div>
+          <h3>Gestational Age Calculator</h3>
+          <p>How many weeks and days pregnant are you? From LMP, due date, or ultrasound.</p>
+        </a>
+        <a href="/how-many-weeks-pregnant/" class="card">
+          <div class="card-icon card-icon-mint"><Icon name="pregnant" /></div>
+          <h3>How Many Weeks Pregnant</h3>
+          <p>Same calculation, conversational framing. Understand the dating method.</p>
+        </a>
+        <a href="/trimester-calculator/" class="card">
+          <div class="card-icon card-icon-peach"><Icon name="trimester" /></div>
+          <h3>Trimester Calculator</h3>
+          <p>Which trimester are you in? ACOG boundaries and milestone placement.</p>
+        </a>
+        <a href="/conception-date-calculator/" class="card">
+          <div class="card-icon card-icon-peach"><Icon name="conception" /></div>
+          <h3>Conception Date Calculator</h3>
+          <p>Estimated conception window and fertile window from LMP or due date.</p>
+        </a>
+        <a href="/pregnancy-milestone-dates/" class="card">
+          <div class="card-icon card-icon-navy"><Icon name="milestone" /></div>
+          <h3>Pregnancy Milestone Dates</h3>
+          <p>Dated list of key milestones — scans, quickening, viability, term dates.</p>
+        </a>
+        <a href="/due-date-calculator/" class="card">
+          <div class="card-icon card-icon-navy"><Icon name="due-date" /></div>
+          <h3>Due Date Calculator</h3>
+          <p>Four modes: LMP, conception, IVF transfer, or ultrasound dating.</p>
+        </a>
+        <a href="/ovulation-calculator/" class="card">
+          <div class="card-icon card-icon-mint"><Icon name="conception" /></div>
+          <h3>Ovulation Calculator</h3>
+          <p>Estimate your ovulation date and fertile window from LMP and cycle length.</p>
+        </a>
+        <a href="/pregnancy-test-tracker/" class="card">
+          <div class="card-icon card-icon-peach"><Icon name="test" /></div>
+          <h3>Pregnancy Test Tracker</h3>
+          <p>Track your test results and understand what they mean.</p>
+        </a>
+        <a href="/kick-counter/" class="card">
+          <div class="card-icon card-icon-navy"><Icon name="baby" /></div>
+          <h3>Kick Counter</h3>
+          <p>Track your baby's movements from week 28 onward.</p>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Guides Section -->
+  <section class="section section-mint">
+    <div class="section-inner">
+      <div class="section-header">
+        <h2>Pregnancy Guides</h2>
+        <p>Expert-reviewed guides covering every trimester, symptom, and milestone.</p>
+      </div>
+      <div class="card-grid">
+        <a href="/guides/first-trimester/" class="card">
+          <div class="card-icon card-icon-mint"><Icon name="sprout" /></div>
+          <h3>First Trimester</h3>
+          <p>What to expect in weeks 1-13 — symptoms, development, and screening tests.</p>
+        </a>
+        <a href="/guides/second-trimester/" class="card">
+          <div class="card-icon card-icon-mint"><Icon name="flower" /></div>
+          <h3>Second Trimester</h3>
+          <p>Movement, energy, and the anatomy scan — weeks 14-27.</p>
+        </a>
+        <a href="/guides/third-trimester/" class="card">
+          <div class="card-icon card-icon-mint"><Icon name="tree" /></div>
+          <h3>Third Trimester</h3>
+          <p>Preparing for birth, monitoring, and term definitions — weeks 28-40+.</p>
+        </a>
+        <a href="/guides/prenatal-vitamins/" class="card">
+          <div class="card-icon card-icon-peach"><Icon name="pill" /></div>
+          <h3>Prenatal Vitamins</h3>
+          <p>Folic acid, iron, DHA, calcium, and what to look for in a prenatal vitamin.</p>
+        </a>
+        <a href="/guides/pregnancy-weight-gain/" class="card">
+          <div class="card-icon card-icon-peach"><Icon name="scale" /></div>
+          <h3>Pregnancy Weight Gain</h3>
+          <p>Healthy weight gain by BMI, trimester breakdown, and practical tips.</p>
+        </a>
+        <a href="/guides/fetal-development/" class="card">
+          <div class="card-icon card-icon-peach"><Icon name="baby" /></div>
+          <h3>Fetal Development</h3>
+          <p>Week-by-week development from embryo to fetus to full term.</p>
+        </a>
+        <a href="/guides/pregnancy-week-by-week/" class="card">
+          <div class="card-icon card-icon-navy"><Icon name="book" /></div>
+          <h3>Pregnancy Week by Week</h3>
+          <p>What happens to your body and baby at each stage of pregnancy.</p>
+        </a>
+        <a href="/guides/gestational-age-explained/" class="card">
+          <div class="card-icon card-icon-navy"><Icon name="compass" /></div>
+          <h3>Gestational Age Explained</h3>
+          <p>What gestational age means and why it counts from your last period.</p>
+        </a>
+        <a href="/guides/due-date-explained/" class="card">
+          <div class="card-icon card-icon-navy"><Icon name="calendar" /></div>
+          <h3>Due Date Explained</h3>
+          <p>How your due date is calculated and how accurate it really is.</p>
+        </a>
+        <a href="/guides/pregnancy-test-timing/" class="card">
+          <div class="card-icon card-icon-navy"><Icon name="test" /></div>
+          <h3>Pregnancy Test Timing</h3>
+          <p>When to take a pregnancy test for the most accurate result.</p>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Trust Section -->
+  <section class="section section-white">
+    <div class="section-inner">
+      <div class="section-header">
+        <h2>Why Bump Compass?</h2>
+        <p>Built with care, sourced with integrity.</p>
+      </div>
+      <div class="card-grid">
+        <div class="card">
+          <div class="card-icon card-icon-mint"><Icon name="microscope" /></div>
+          <h3>Sourced Content</h3>
+          <p>Every clinical claim is cited to ACOG, NICHD, Mayo Clinic, or NHS. Where authorities disagree, we show the range and name each source.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon card-icon-peach"><Icon name="lock" /></div>
+          <h3>Privacy First</h3>
+          <p>Every tool runs in your browser. We do not store your dates, your inputs, or any personal information.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon card-icon-navy"><Icon name="heart" /></div>
+          <h3>Honest Limits</h3>
+          <p>We say "the authorities disagree" or "there is no single definition" rather than give you a confident number that is wrong for your situation.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <AdUnit slot="1234567898" format="horizontal" />
+</Base>

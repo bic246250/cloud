@@ -1,0 +1,173 @@
+---
+import Base from '../layouts/Base.astro';
+import AdUnit from '../components/AdUnit.astro';
+import Icon from '../components/Icon.astro';
+import { calculateGestationalAge, formatDate } from '../lib/pregnancy';
+
+const title = 'Kick Counter';
+const description = 'Track your baby\'s movements during pregnancy. Count kicks and monitor your baby\'s activity patterns from week 28 onward.';
+---
+
+<Base title={title} description={description}>
+  <section class="section section-white">
+    <div class="section-inner">
+      <div class="prose">
+        <h1>Kick Counter</h1>
+
+        <p>Track your baby's movements during pregnancy. Count kicks and monitor your baby's activity patterns from week 28 onward. Regular movement is a sign of a healthy baby.</p>
+
+        <div class="card" id="calculator">
+          <h2 class="mt-0">Count Your Baby's Kicks</h2>
+
+          <div style="margin-bottom: 1rem;">
+            <label for="lmp" style="display: block; font-weight: 600; margin-bottom: 0.25rem;">Last menstrual period (LMP)</label>
+            <input type="date" id="lmp" name="lmp" required style="width: 100%; padding: 0.5rem; border: 1px solid var(--border); border-radius: 4px; font-size: 1rem;" />
+          </div>
+
+          <div style="margin-bottom: 1rem;">
+            <label for="cycle" style="display: block; font-weight: 600; margin-bottom: 0.25rem;">Average cycle length (days)</label>
+            <input type="number" id="cycle" name="cycle" value="28" min="21" max="45" style="width: 100%; padding: 0.5rem; border: 1px solid var(--border); border-radius: 4px; font-size: 1rem;" />
+          </div>
+
+          <div style="margin-bottom: 1rem;">
+            <label for="count-date" style="display: block; font-weight: 600; margin-bottom: 0.25rem;">Counting date</label>
+            <input type="date" id="count-date" name="count-date" style="width: 100%; padding: 0.5rem; border: 1px solid var(--border); border-radius: 4px; font-size: 1rem;" />
+          </div>
+
+          <div style="margin-bottom: 1rem;">
+            <label for="kicks" style="display: block; font-weight: 600; margin-bottom: 0.25rem;">Number of kicks felt in 2 hours</label>
+            <input type="number" id="kicks" name="kicks" min="0" max="100" value="10" style="width: 100%; padding: 0.5rem; border: 1px solid var(--border); border-radius: 4px; font-size: 1rem;" />
+          </div>
+
+          <button id="calc-btn">Count</button>
+
+          <div id="result" style="display: none; margin-top: 1.5rem; padding: 1rem; background: var(--mint); border: 1px solid var(--teal); border-radius: 8px;">
+            <h3 class="mt-0">Your Results</h3>
+            <div id="result-content"></div>
+          </div>
+        </div>
+
+        <h2>Why Count Kicks?</h2>
+
+        <p>Kick counting is a simple way to monitor your baby's well-being in the third trimester. Regular movement is a sign of a healthy baby. A decrease in movement can be an early sign of a problem.</p>
+
+        <h2>How to Count Kicks</h2>
+
+        <ol>
+          <li><strong>Choose a time:</strong> Pick a time when your baby is usually active, often after a meal.</li>
+          <li><strong>Get comfortable:</strong> Lie on your left side or sit in a comfortable position.</li>
+          <li><strong>Count movements:</strong> Count each kick, roll, swish, or flutter. Do not count hiccups.</li>
+          <li><strong>Track time:</strong> Note how long it takes to feel 10 movements.</li>
+        </ol>
+
+        <h2>What Is Normal?</h2>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Gestational Age</th>
+              <th>Expected Movements</th>
+              <th>When to Call</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>28-32 weeks</td>
+              <td>10 movements in 2 hours</td>
+              <td>Fewer than 10 in 2 hours</td>
+            </tr>
+            <tr>
+              <td>32-36 weeks</td>
+              <td>10 movements in 1-2 hours</td>
+              <td>Fewer than 10 in 2 hours</td>
+            </tr>
+            <tr>
+              <td>36-40 weeks</td>
+              <td>10 movements in 1 hour</td>
+              <td>Fewer than 10 in 1 hour</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h2>When to Call Your Clinician</h2>
+
+        <p>Contact your healthcare provider immediately if:</p>
+        <ul>
+          <li>You feel fewer than 10 movements in 2 hours</li>
+          <li>You notice a significant decrease in your baby's usual movement pattern</li>
+          <li>You feel no movement for several hours</li>
+          <li>You have any concerns about your baby's activity</li>
+        </ul>
+
+        <div class="affiliate-disclosure">
+          <strong>Not medical advice:</strong> This tool provides general guidance. It does not replace professional medical advice, diagnosis, or treatment. Always consult your own clinician. If you are concerned about your baby's movements, contact your healthcare provider immediately.
+        </div>
+
+        <h2>Related Tools</h2>
+
+        <ul>
+          <li><a href="/gestational-age-calculator/">Gestational Age Calculator</a> — how many weeks pregnant are you?</li>
+          <li><a href="/pregnancy-milestone-dates/">Pregnancy Milestone Dates</a> — when does quickening start?</li>
+          <li><a href="/pregnancy-test-tracker/">Pregnancy Test Tracker</a> — track your test results</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <AdUnit slot="1234567902" format="horizontal" />
+</Base>
+
+<script>
+  import { calculateGestationalAge, formatDate } from '../lib/pregnancy';
+
+  const lmpInput = document.getElementById('lmp') as HTMLInputElement;
+  const cycleInput = document.getElementById('cycle') as HTMLInputElement;
+  const countDateInput = document.getElementById('count-date') as HTMLInputElement;
+  const kicksInput = document.getElementById('kicks') as HTMLInputElement;
+  const calcBtn = document.getElementById('calc-btn') as HTMLButtonElement;
+  const resultDiv = document.getElementById('result') as HTMLDivElement;
+  const resultContent = document.getElementById('result-content') as HTMLDivElement;
+
+  calcBtn.addEventListener('click', () => {
+    const lmpVal = lmpInput.value;
+    if (!lmpVal) {
+      alert('Please enter your last menstrual period.');
+      return;
+    }
+
+    const lmp = new Date(lmpVal + 'T00:00:00');
+    const cycleLength = parseInt(cycleInput.value) || 28;
+    const countDate = countDateInput.value
+      ? new Date(countDateInput.value + 'T00:00:00')
+      : new Date();
+    const kicks = parseInt(kicksInput.value) || 0;
+
+    if (cycleLength < 21 || cycleLength > 45) {
+      alert('Cycle length should be between 21 and 45 days.');
+      return;
+    }
+
+    if (countDate < lmp) {
+      alert('The counting date cannot be before your last menstrual period.');
+      return;
+    }
+
+    const ga = calculateGestationalAge({ lmp, cycleLength, referenceDate: countDate });
+
+    let html = `
+      <p><strong>Gestational age:</strong> ${ga.weeks} weeks ${ga.days} days</p>
+      <p><strong>Kicks counted:</strong> ${kicks} in 2 hours</p>
+    `;
+
+    if (ga.weeks < 28) {
+      html += `<p><strong>Note:</strong> Kick counting is typically recommended from week 28 onward. Before this, movement patterns are less predictable.</p>`;
+    } else if (kicks >= 10) {
+      html += `<p><strong>Result:</strong> Your baby's movement is within the normal range. Continue to monitor daily.</p>`;
+    } else {
+      html += `<p><strong>Result:</strong> Fewer than 10 movements in 2 hours. Contact your healthcare provider for guidance.</p>`;
+    }
+
+    resultContent.innerHTML = html;
+    resultDiv.style.display = 'block';
+  });
+</script>

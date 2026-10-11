@@ -1,0 +1,245 @@
+---
+import Base from '../layouts/Base.astro';
+import AdUnit from '../components/AdUnit.astro';
+import { calculateDueDateFromConception, calculateDueDateFromIVF, calculateDueDateFromUltrasound, formatDate } from '../lib/pregnancy';
+
+const title = 'Due Date Calculator';
+const description = 'Calculate your due date from LMP, conception date, IVF transfer, or ultrasound. Four modes with cycle correction and ACOG term classification.';
+---
+
+<Base title={title} description={description}>
+  <section class="section section-white">
+    <div class="section-inner">
+      <div class="prose">
+    <h1>Due Date Calculator</h1>
+
+    <p>Calculate your due date using one of four methods: last menstrual period (LMP), conception date, IVF transfer, or ultrasound. This is a support page — the head term "due date calculator" is locked by institutions, so we do not target it for organic search.</p>
+
+    <div class="card" id="calculator">
+      <h2 class="mt-0">Calculate Your Due Date</h2>
+
+      <div style="margin-bottom: 1rem;">
+        <label for="method" style="display: block; font-weight: 600; margin-bottom: 0.25rem;">Calculation method</label>
+        <select id="method" name="method" style="width: 100%; padding: 0.5rem; border: 1px solid var(--color-border); border-radius: 4px; font-size: 1rem;">
+          <option value="lmp">Last menstrual period (LMP)</option>
+          <option value="conception">Conception date</option>
+          <option value="ivf3">IVF transfer — Day 3 embryo</option>
+          <option value="ivf5">IVF transfer — Day 5 embryo</option>
+          <option value="ultrasound">Ultrasound dating</option>
+        </select>
+      </div>
+
+      <div id="input-lmp" style="margin-bottom: 1rem;">
+        <label for="lmp" style="display: block; font-weight: 600; margin-bottom: 0.25rem;">Last menstrual period (LMP)</label>
+        <input type="date" id="lmp" name="lmp" style="width: 100%; padding: 0.5rem; border: 1px solid var(--color-border); border-radius: 4px; font-size: 1rem;" />
+      </div>
+
+      <div id="input-conception" style="margin-bottom: 1rem; display: none;">
+        <label for="conception" style="display: block; font-weight: 600; margin-bottom: 0.25rem;">Conception date</label>
+        <input type="date" id="conception" name="conception" style="width: 100%; padding: 0.5rem; border: 1px solid var(--color-border); border-radius: 4px; font-size: 1rem;" />
+      </div>
+
+      <div id="input-ivf" style="margin-bottom: 1rem; display: none;">
+        <label for="ivf-date" style="display: block; font-weight: 600; margin-bottom: 0.25rem;">Embryo transfer date</label>
+        <input type="date" id="ivf-date" name="ivf-date" style="width: 100%; padding: 0.5rem; border: 1px solid var(--color-border); border-radius: 4px; font-size: 1rem;" />
+      </div>
+
+      <div id="input-ultrasound" style="margin-bottom: 1rem; display: none;">
+        <label for="us-date" style="display: block; font-weight: 600; margin-bottom: 0.25rem;">Ultrasound date</label>
+        <input type="date" id="us-date" name="us-date" style="width: 100%; padding: 0.5rem; border: 1px solid var(--color-border); border-radius: 4px; font-size: 1rem;" />
+        <label for="us-weeks" style="display: block; font-weight: 600; margin-bottom: 0.25rem; margin-top: 0.75rem;">Gestational age at ultrasound (weeks)</label>
+        <input type="number" id="us-weeks" name="us-weeks" min="4" max="42" style="width: 100%; padding: 0.5rem; border: 1px solid var(--color-border); border-radius: 4px; font-size: 1rem;" />
+        <label for="us-days" style="display: block; font-weight: 600; margin-bottom: 0.25rem; margin-top: 0.75rem;">Gestational age at ultrasound (days)</label>
+        <input type="number" id="us-days" name="us-days" min="0" max="6" value="0" style="width: 100%; padding: 0.5rem; border: 1px solid var(--color-border); border-radius: 4px; font-size: 1rem;" />
+      </div>
+
+      <div id="input-cycle" style="margin-bottom: 1rem;">
+        <label for="cycle" style="display: block; font-weight: 600; margin-bottom: 0.25rem;">Average cycle length (days)</label>
+        <input type="number" id="cycle" name="cycle" value="28" min="21" max="45" style="width: 100%; padding: 0.5rem; border: 1px solid var(--color-border); border-radius: 4px; font-size: 1rem;" />
+      </div>
+
+      <button id="calc-btn">Calculate</button>
+
+      <div id="result" style="display: none; margin-top: 1.5rem; padding: 1rem; background: var(--color-card-bg); border: 1px solid var(--color-card-border); border-radius: 8px;">
+        <h3 class="mt-0">Your Result</h3>
+        <div id="result-content"></div>
+      </div>
+    </div>
+
+    <h2>The Four Methods</h2>
+
+    <h3>1. Last Menstrual Period (LMP)</h3>
+    <p><strong>EDD = LMP + 280 + (cycle length − 28)</strong></p>
+    <p>This is the standard method (Naegele's rule with cycle correction). It assumes ovulation occurs 14 days before the next expected period.</p>
+
+    <h3>2. Conception Date</h3>
+    <p><strong>EDD = Conception date + 266 days</strong></p>
+    <p>This is more accurate than LMP if you know the conception date (for example, from IVF or known intercourse).</p>
+
+    <h3>3. IVF Transfer</h3>
+    <p><strong>EDD = Transfer date + 263 days (Day 3) or + 261 days (Day 5)</strong></p>
+    <p>IVF dating is the most precise method because the exact date of fertilization is known.</p>
+
+    <h3>4. Ultrasound Dating</h3>
+    <p><strong>EDD = Ultrasound date + (280 − gestational age at ultrasound in days)</strong></p>
+    <p>First-trimester ultrasound is the most accurate dating method. ACOG recommends using the ultrasound date if it differs from the LMP date by more than 7 days.</p>
+
+    <h2>Which Method Is Most Accurate?</h2>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Method</th>
+          <th>Accuracy</th>
+          <th>Notes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>IVF transfer</td>
+          <td>Most accurate</td>
+          <td>Exact fertilization date known</td>
+        </tr>
+        <tr>
+          <td>First-trimester ultrasound</td>
+          <td>± 5 days</td>
+          <td>CRL measurement</td>
+        </tr>
+        <tr>
+          <td>Conception date</td>
+          <td>± 3-5 days</td>
+          <td>If known precisely</td>
+        </tr>
+        <tr>
+          <td>LMP with cycle correction</td>
+          <td>± 7 days</td>
+          <td>Standard method</td>
+        </tr>
+        <tr>
+          <td>Second-trimester ultrasound</td>
+          <td>± 8-14 days</td>
+          <td>Less accurate than first trimester</td>
+        </tr>
+        <tr>
+          <td>Third-trimester ultrasound</td>
+          <td>± 21-28 days</td>
+          <td>Too unreliable to redate</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p><em>Source: ACOG Committee Opinion 700, Methods for Estimating the Due Date.</em></p>
+
+    <h2>What If the Methods Disagree?</h2>
+
+    <p>If your LMP-based due date and your ultrasound-based due date differ by more than 7 days, ACOG recommends using the ultrasound date. This is because ultrasound dating in the first trimester is more accurate than LMP-based dating.</p>
+
+    <h2>When to Talk to Your Clinician</h2>
+
+    <p>Contact your healthcare provider if:</p>
+    <ul>
+      <li>You are unsure which method to use</li>
+      <li>Your due dates from different methods disagree</li>
+      <li>You have irregular cycles</li>
+      <li>You have questions about your due date</li>
+    </ul>
+
+    <div class="affiliate-disclosure">
+      <strong>Not medical advice:</strong> This calculator provides an estimate based on standard formulas. It does not replace professional medical advice, diagnosis, or treatment. Always consult your own clinician.
+    </div>
+
+    <AdUnit slot="1234567897" format="horizontal" />
+
+    <h2>Related Tools</h2>
+
+    <ul>
+      <li><a href="/gestational-age-calculator/">Gestational Age Calculator</a> — full results with gestational age</li>
+      <li><a href="/how-many-weeks-pregnant/">How Many Weeks Pregnant</a> — conversational framing</li>
+      <li><a href="/trimester-calculator/">Trimester Calculator</a> — which trimester are you in?</li>
+      <li><a href="/pregnancy-milestone-dates/">Pregnancy Milestone Dates</a> — dated list of key milestones</li>
+    </ul>
+  </div>
+    </div>
+  </section>
+  <script>
+    import { calculateDueDateFromConception, calculateDueDateFromIVF, calculateDueDateFromUltrasound, formatDate } from '../lib/pregnancy';
+
+    const methodSelect = document.getElementById('method') as HTMLSelectElement;
+    const lmpInput = document.getElementById('lmp') as HTMLInputElement;
+    const conceptionInput = document.getElementById('conception') as HTMLInputElement;
+    const ivfDateInput = document.getElementById('ivf-date') as HTMLInputElement;
+    const usDateInput = document.getElementById('us-date') as HTMLInputElement;
+    const usWeeksInput = document.getElementById('us-weeks') as HTMLInputElement;
+    const usDaysInput = document.getElementById('us-days') as HTMLInputElement;
+    const cycleInput = document.getElementById('cycle') as HTMLInputElement;
+    const calcBtn = document.getElementById('calc-btn') as HTMLButtonElement;
+    const resultDiv = document.getElementById('result') as HTMLDivElement;
+    const resultContent = document.getElementById('result-content') as HTMLDivElement;
+
+    const inputDivs = {
+      lmp: document.getElementById('input-lmp') as HTMLDivElement,
+      conception: document.getElementById('input-conception') as HTMLDivElement,
+      ivf3: document.getElementById('input-ivf') as HTMLDivElement,
+      ivf5: document.getElementById('input-ivf') as HTMLDivElement,
+      ultrasound: document.getElementById('input-ultrasound') as HTMLDivElement,
+    };
+
+    methodSelect.addEventListener('change', () => {
+      const method = methodSelect.value;
+      for (const [key, div] of Object.entries(inputDivs)) {
+        div.style.display = key === method ? 'block' : 'none';
+      }
+    });
+
+    calcBtn.addEventListener('click', () => {
+      const method = methodSelect.value;
+      let dueDate: Date | null = null;
+      let methodLabel = '';
+
+      if (method === 'lmp') {
+        const lmpVal = lmpInput.value;
+        if (!lmpVal) { alert('Please enter your last menstrual period.'); return; }
+        const lmp = new Date(lmpVal + 'T00:00:00');
+        const cycleLength = parseInt(cycleInput.value) || 28;
+        const cycleOffset = cycleLength - 28;
+        const correctedLmp = new Date(lmp);
+        correctedLmp.setDate(correctedLmp.getDate() + cycleOffset);
+        dueDate = new Date(correctedLmp);
+        dueDate.setDate(dueDate.getDate() + 280);
+        methodLabel = 'LMP with cycle correction';
+      } else if (method === 'conception') {
+        const conceptionVal = conceptionInput.value;
+        if (!conceptionVal) { alert('Please enter your conception date.'); return; }
+        const conception = new Date(conceptionVal + 'T00:00:00');
+        dueDate = calculateDueDateFromConception(conception);
+        methodLabel = 'Conception date';
+      } else if (method === 'ivf3' || method === 'ivf5') {
+        const ivfVal = ivfDateInput.value;
+        if (!ivfVal) { alert('Please enter your embryo transfer date.'); return; }
+        const ivfDate = new Date(ivfVal + 'T00:00:00');
+        const day = method === 'ivf3' ? 3 : 5;
+        dueDate = calculateDueDateFromIVF(ivfDate, day as 3 | 5);
+        methodLabel = `IVF transfer — Day ${day} embryo`;
+      } else if (method === 'ultrasound') {
+        const usVal = usDateInput.value;
+        if (!usVal) { alert('Please enter your ultrasound date.'); return; }
+        const usDate = new Date(usVal + 'T00:00:00');
+        const weeks = parseInt(usWeeksInput.value) || 0;
+        const days = parseInt(usDaysInput.value) || 0;
+        if (weeks < 4 || weeks > 42) { alert('Gestational age should be between 4 and 42 weeks.'); return; }
+        dueDate = calculateDueDateFromUltrasound(usDate, weeks, days);
+        methodLabel = 'Ultrasound dating';
+      }
+
+      if (dueDate) {
+        let html = `
+          <p><strong>Estimated due date:</strong> ${formatDate(dueDate)}</p>
+          <p><strong>Method:</strong> ${methodLabel}</p>
+          <p class="text-muted text-small">This is an estimate. Only about 5% of babies are born on their exact due date.</p>
+        `;
+        resultContent.innerHTML = html;
+        resultDiv.style.display = 'block';
+      }
+    });
+  </script>
+</Base>

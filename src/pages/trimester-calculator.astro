@@ -1,0 +1,165 @@
+---
+import Base from '../layouts/Base.astro';
+import AdUnit from '../components/AdUnit.astro';
+import { calculateGestationalAge, formatDate } from '../lib/pregnancy';
+
+const title = 'Trimester Calculator';
+const description = 'Which trimester are you in? Calculate your trimester from your last menstrual period using ACOG boundaries. See trimester dates and milestone placement.';
+---
+
+<Base title={title} description={description}>
+  <section class="section section-white">
+    <div class="section-inner">
+      <div class="prose">
+    <h1>Trimester Calculator</h1>
+
+    <p>Enter your last menstrual period to find out which trimester you are in, the dates of each trimester, and which trimester key milestones fall in.</p>
+
+    <div class="card" id="calculator">
+      <h2 class="mt-0">Calculate Your Trimester</h2>
+
+      <div style="margin-bottom: 1rem;">
+        <label for="lmp" style="display: block; font-weight: 600; margin-bottom: 0.25rem;">Last menstrual period (LMP)</label>
+        <input type="date" id="lmp" name="lmp" required style="width: 100%; padding: 0.5rem; border: 1px solid var(--color-border); border-radius: 4px; font-size: 1rem;" />
+      </div>
+
+      <div style="margin-bottom: 1rem;">
+        <label for="cycle" style="display: block; font-weight: 600; margin-bottom: 0.25rem;">Average cycle length (days)</label>
+        <input type="number" id="cycle" name="cycle" value="28" min="21" max="45" style="width: 100%; padding: 0.5rem; border: 1px solid var(--color-border); border-radius: 4px; font-size: 1rem;" />
+      </div>
+
+      <button id="calc-btn">Calculate</button>
+
+      <div id="result" style="display: none; margin-top: 1.5rem; padding: 1rem; background: var(--color-card-bg); border: 1px solid var(--color-card-border); border-radius: 8px;">
+        <h3 class="mt-0">Your Results</h3>
+        <div id="result-content"></div>
+      </div>
+    </div>
+
+    <h2>ACOG Trimester Boundaries</h2>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Trimester</th>
+          <th>Weeks</th>
+          <th>Days from LMP</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>First</td>
+          <td>0 0/7 – 13 6/7</td>
+          <td>0 – 97</td>
+        </tr>
+        <tr>
+          <td>Second</td>
+          <td>14 0/7 – 27 6/7</td>
+          <td>98 – 195</td>
+        </tr>
+        <tr>
+          <td>Third</td>
+          <td>28 0/7 – birth</td>
+          <td>196+</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p><em>Source: ACOG Committee Opinion, Definition of Term Pregnancy.</em></p>
+
+    <h2>What Happens in Each Trimester</h2>
+
+    <h3>First Trimester (0 – 13 6/7 weeks)</h3>
+    <ul>
+      <li>Embryo develops into a fetus</li>
+      <li>All major organs form by week 13</li>
+      <li>First-trimester screening (NT scan) at 11-13 weeks</li>
+      <li>Common symptoms: nausea, fatigue, breast tenderness</li>
+    </ul>
+
+    <h3>Second Trimester (14 0/7 – 27 6/7 weeks)</h3>
+    <ul>
+      <li>Quickening (first movement) typically 16-22 weeks</li>
+      <li>Anatomy scan at 18-22 weeks</li>
+      <li>Energy often returns</li>
+      <li>Common symptoms: back pain, round ligament pain, heartburn</li>
+    </ul>
+
+    <h3>Third Trimester (28 0/7 – birth)</h3>
+    <ul>
+      <li>Rapid fetal growth</li>
+      <li>Baby begins to drop (lightening) in the weeks before birth</li>
+      <li>Common symptoms: shortness of breath, frequent urination, Braxton Hicks contractions</li>
+      <li>Term begins at 37 0/7 weeks</li>
+    </ul>
+
+    <h2>Trimester Boundary Variations</h2>
+
+    <p>Some sources use slightly different boundaries for the second trimester. For example, some define it as 13-26 weeks or 13-27 weeks. We follow ACOG, which defines the second trimester as 14 0/7 – 27 6/7 weeks.</p>
+
+    <p>Where sources disagree, we name the authority we follow and note the variance. This is more useful than a single number that may not match your care provider's framework.</p>
+
+    <div class="affiliate-disclosure">
+      <strong>Not medical advice:</strong> This calculator provides an estimate based on standard formulas. It does not replace professional medical advice, diagnosis, or treatment. Always consult your own clinician.
+    </div>
+
+    <AdUnit slot="1234567894" format="horizontal" />
+
+    <h2>Related Tools</h2>
+
+    <ul>
+      <li><a href="/gestational-age-calculator/">Gestational Age Calculator</a> — full results with gestational age</li>
+      <li><a href="/how-many-weeks-pregnant/">How Many Weeks Pregnant</a> — conversational framing</li>
+      <li><a href="/pregnancy-milestone-dates/">Pregnancy Milestone Dates</a> — dated list of key milestones</li>
+      <li><a href="/due-date-calculator/">Due Date Calculator</a> — four modes: LMP, conception, IVF, ultrasound</li>
+    </ul>
+  </div>
+    </div>
+  </section>
+  <script>
+    import { calculateGestationalAge, formatDate } from '../lib/pregnancy';
+
+    const lmpInput = document.getElementById('lmp') as HTMLInputElement;
+    const cycleInput = document.getElementById('cycle') as HTMLInputElement;
+    const calcBtn = document.getElementById('calc-btn') as HTMLButtonElement;
+    const resultDiv = document.getElementById('result') as HTMLDivElement;
+    const resultContent = document.getElementById('result-content') as HTMLDivElement;
+
+    calcBtn.addEventListener('click', () => {
+      const lmpVal = lmpInput.value;
+      if (!lmpVal) {
+        alert('Please enter your last menstrual period.');
+        return;
+      }
+
+      const lmp = new Date(lmpVal + 'T00:00:00');
+      const cycleLength = parseInt(cycleInput.value) || 28;
+      const refDate = new Date();
+
+      if (cycleLength < 21 || cycleLength > 45) {
+        alert('Cycle length should be between 21 and 45 days.');
+        return;
+      }
+
+      if (refDate < lmp) {
+        alert('The date you entered is in the future. Please check and try again.');
+        return;
+      }
+
+      const result = calculateGestationalAge({ lmp, cycleLength, referenceDate: refDate });
+
+      const trimesterNames = ['', 'First', 'Second', 'Third'];
+      const trimesterLabel = trimesterNames[result.trimester];
+
+      let html = `
+        <p><strong>Current trimester:</strong> ${trimesterLabel} trimester</p>
+        <p><strong>Gestational age:</strong> ${result.weeks} weeks ${result.days} days</p>
+        <p><strong>Trimester dates:</strong> ${formatDate(result.trimesterStart)} – ${formatDate(result.trimesterEnd)}</p>
+        <p><strong>Estimated due date:</strong> ${formatDate(result.estimatedDueDate)}</p>
+      `;
+
+      resultContent.innerHTML = html;
+      resultDiv.style.display = 'block';
+    });
+  </script>
+</Base>

@@ -1,0 +1,158 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string;
+  canonical?: string;
+  noindex?: boolean;
+  type?: string;
+  publishedTime?: string;
+  tags?: string[];
+}
+
+const {
+  title,
+  description = 'Free pregnancy calculators and guides — gestational age, due dates, trimesters, milestones, and more.',
+  canonical,
+  noindex = false,
+  type = 'website',
+  publishedTime,
+  tags = [],
+} = Astro.props;
+
+const siteTitle = 'Bump Compass';
+const fullTitle = title === 'Home' ? siteTitle : `${title} | ${siteTitle}`;
+const canonicalURL = canonical ? new URL(canonical, Astro.site) : new URL(Astro.url.pathname, Astro.site);
+const ogImage = new URL('/og-default.png', Astro.site);
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: siteTitle,
+  url: Astro.site,
+  description: 'Free pregnancy, baby, and breastfeeding tools and guides.',
+};
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalURL.href} />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
+
+    <!-- Open Graph -->
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content={type} />
+    <meta property="og:url" content={canonicalURL.href} />
+    <meta property="og:image" content={ogImage.href} />
+    <meta property="og:site_name" content={siteTitle} />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <!-- AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4383269716621209" crossorigin="anonymous"></script>
+
+    <!-- JSON-LD -->
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="header-inner">
+        <a href="/" class="logo">
+          <img src="/images/bumpcompass-logo.png" alt="Bump Compass logo" />
+          <span class="logo-text">
+            <span class="logo-name">bump<span class="teal">compass</span></span>
+            <span class="logo-tagline">Real guidance. Every step.</span>
+          </span>
+        </a>
+        <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false" onclick="document.querySelector('.nav-list').classList.toggle('open'); this.setAttribute('aria-expanded', this.getAttribute('aria-expanded') === 'true' ? 'false' : 'true');">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <line x1="3" y1="6" x2="21" y2="6"/>
+            <line x1="3" y1="12" x2="21" y2="12"/>
+            <line x1="3" y1="18" x2="21" y2="18"/>
+          </svg>
+        </button>
+        <nav aria-label="Main navigation">
+          <ul class="nav-list">
+            <li><a href="/gestational-age-calculator/" aria-current={Astro.url.pathname.startsWith('/gestational-age-calculator') ? 'page' : undefined}>Gestational Age</a></li>
+            <li><a href="/how-many-weeks-pregnant/" aria-current={Astro.url.pathname.startsWith('/how-many-weeks-pregnant') ? 'page' : undefined}>Weeks Pregnant</a></li>
+            <li><a href="/trimester-calculator/" aria-current={Astro.url.pathname.startsWith('/trimester-calculator') ? 'page' : undefined}>Trimester</a></li>
+            <li><a href="/conception-date-calculator/" aria-current={Astro.url.pathname.startsWith('/conception-date-calculator') ? 'page' : undefined}>Conception</a></li>
+            <li><a href="/pregnancy-milestone-dates/" aria-current={Astro.url.pathname.startsWith('/pregnancy-milestone-dates') ? 'page' : undefined}>Milestones</a></li>
+            <li><a href="/due-date-calculator/" aria-current={Astro.url.pathname.startsWith('/due-date-calculator') ? 'page' : undefined}>Due Date</a></li>
+            <li><a href="/ovulation-calculator/" aria-current={Astro.url.pathname.startsWith('/ovulation-calculator') ? 'page' : undefined}>Ovulation</a></li>
+            <li><a href="/pregnancy-test-tracker/" aria-current={Astro.url.pathname.startsWith('/pregnancy-test-tracker') ? 'page' : undefined}>Test Tracker</a></li>
+            <li><a href="/kick-counter/" aria-current={Astro.url.pathname.startsWith('/kick-counter') ? 'page' : undefined}>Kick Counter</a></li>
+            <li><a href="/guides/" aria-current={Astro.url.pathname.startsWith('/guides') ? 'page' : undefined}>Guides</a></li>
+            <li><a href="/about/" class="nav-cta" aria-current={Astro.url.pathname.startsWith('/about') ? 'page' : undefined}>About</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <slot />
+    </main>
+
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <div class="footer-grid">
+          <div class="footer-brand">
+            <img src="/images/bumpcompass-logo.png" alt="Bump Compass logo" />
+            <p class="footer-tagline">Real guidance. Every step.</p>
+            <p class="footer-desc">Free pregnancy calculators and guides. Every clinical claim is sourced to ACOG, NICHD, Mayo Clinic, or NHS. We show the range where authorities disagree.</p>
+          </div>
+          <div class="footer-col">
+            <h4>Calculators</h4>
+            <ul>
+              <li><a href="/gestational-age-calculator/">Gestational Age</a></li>
+              <li><a href="/how-many-weeks-pregnant/">How Many Weeks Pregnant</a></li>
+              <li><a href="/trimester-calculator/">Trimester Calculator</a></li>
+              <li><a href="/conception-date-calculator/">Conception Date</a></li>
+              <li><a href="/pregnancy-milestone-dates/">Milestone Dates</a></li>
+              <li><a href="/due-date-calculator/">Due Date Calculator</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h4>Guides</h4>
+            <ul>
+              <li><a href="/guides/first-trimester/">First Trimester</a></li>
+              <li><a href="/guides/second-trimester/">Second Trimester</a></li>
+              <li><a href="/guides/third-trimester/">Third Trimester</a></li>
+              <li><a href="/guides/prenatal-vitamins/">Prenatal Vitamins</a></li>
+              <li><a href="/guides/pregnancy-weight-gain/">Weight Gain</a></li>
+              <li><a href="/guides/fetal-development/">Fetal Development</a></li>
+              <li><a href="/guides/pregnancy-week-by-week/">Week by Week</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h4>Site</h4>
+            <ul>
+              <li><a href="/about/">About</a></li>
+              <li><a href="/contact/">Contact</a></li>
+              <li><a href="/privacy/">Privacy</a></li>
+              <li><a href="/terms/">Terms</a></li>
+              <li><a href="/disclaimer/">Disclaimer</a></li>
+              <li><a href="/affiliate-disclosure/">Affiliate Disclosure</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <p>&copy; {new Date().getFullYear()} Bump Compass Editorial. All rights reserved.</p>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

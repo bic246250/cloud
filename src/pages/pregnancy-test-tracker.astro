@@ -1,0 +1,187 @@
+---
+import Base from '../layouts/Base.astro';
+import AdUnit from '../components/AdUnit.astro';
+import Icon from '../components/Icon.astro';
+import { calculateGestationalAge, formatDate } from '../lib/pregnancy';
+
+const title = 'Pregnancy Test Tracker';
+const description = 'Track your pregnancy test results and hCG levels. Understand what your results mean and when to test again.';
+---
+
+<Base title={title} description={description}>
+  <section class="section section-white">
+    <div class="section-inner">
+      <div class="prose">
+        <h1>Pregnancy Test Tracker</h1>
+
+        <p>Track your pregnancy test results and estimated hCG levels. Understand what your results mean and when to test again for the most accurate result.</p>
+
+        <div class="card" id="calculator">
+          <h2 class="mt-0">Track Your Test</h2>
+
+          <div style="margin-bottom: 1rem;">
+            <label for="lmp" style="display: block; font-weight: 600; margin-bottom: 0.25rem;">Last menstrual period (LMP)</label>
+            <input type="date" id="lmp" name="lmp" required style="width: 100%; padding: 0.5rem; border: 1px solid var(--border); border-radius: 4px; font-size: 1rem;" />
+          </div>
+
+          <div style="margin-bottom: 1rem;">
+            <label for="cycle" style="display: block; font-weight: 600; margin-bottom: 0.25rem;">Average cycle length (days)</label>
+            <input type="number" id="cycle" name="cycle" value="28" min="21" max="45" style="width: 100%; padding: 0.5rem; border: 1px solid var(--border); border-radius: 4px; font-size: 1rem;" />
+          </div>
+
+          <div style="margin-bottom: 1rem;">
+            <label for="test-date" style="display: block; font-weight: 600; margin-bottom: 0.25rem;">Test date</label>
+            <input type="date" id="test-date" name="test-date" style="width: 100%; padding: 0.5rem; border: 1px solid var(--border); border-radius: 4px; font-size: 1rem;" />
+          </div>
+
+          <div style="margin-bottom: 1rem;">
+            <label for="result" style="display: block; font-weight: 600; margin-bottom: 0.25rem;">Test result</label>
+            <select id="result" name="result" style="width: 100%; padding: 0.5rem; border: 1px solid var(--border); border-radius: 4px; font-size: 1rem;">
+              <option value="positive">Positive</option>
+              <option value="negative">Negative</option>
+              <option value="faint">Faint line</option>
+            </select>
+          </div>
+
+          <button id="calc-btn">Track</button>
+
+          <div id="result" style="display: none; margin-top: 1.5rem; padding: 1rem; background: var(--mint); border: 1px solid var(--teal); border-radius: 8px;">
+            <h3 class="mt-0">Your Results</h3>
+            <div id="result-content"></div>
+          </div>
+        </div>
+
+        <h2>Understanding hCG Levels</h2>
+
+        <p>Human chorionic gonadotropin (hCG) is the hormone detected by pregnancy tests. It doubles approximately every 48-72 hours in early pregnancy.</p>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Weeks Since LMP</th>
+              <th>Typical hCG Range (mIU/mL)</th>
+              <th>Detection</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>3 weeks</td>
+              <td>5-50</td>
+              <td>Blood test only</td>
+            </tr>
+            <tr>
+              <td>4 weeks</td>
+              <td>5-426</td>
+              <td>Urine test possible</td>
+            </tr>
+            <tr>
+              <td>5 weeks</td>
+              <td>18-7,340</td>
+              <td>Urine test reliable</td>
+            </tr>
+            <tr>
+              <td>6 weeks</td>
+              <td>1,080-56,500</td>
+              <td>Urine test reliable</td>
+            </tr>
+            <tr>
+              <td>7-8 weeks</td>
+              <td>7,650-229,000</td>
+              <td>Peak levels</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <p><em>Source: American Pregnancy Association, hCG Levels by Week.</em></p>
+
+        <h2>What Your Result Means</h2>
+
+        <h3>Positive Result</h3>
+        <p>A positive result means hCG was detected in your urine. This is almost always accurate. Contact your healthcare provider to schedule your first prenatal visit.</p>
+
+        <h3>Negative Result</h3>
+        <p>A negative result means hCG was not detected. If your period is late, wait a few days and test again using your first morning urine.</p>
+
+        <h3>Faint Line</h3>
+        <p>A faint line is usually a positive result — it means hCG is present but at low levels. Test again in 2-3 days; the line should get darker as hCG rises.</p>
+
+        <h2>When to Test Again</h2>
+
+        <ul>
+          <li><strong>Negative test, no period:</strong> Wait 3-5 days and test again</li>
+          <li><strong>Faint line:</strong> Test again in 2-3 days — line should darken</li>
+          <li><strong>Positive test:</strong> Schedule a prenatal visit — no need to retest</li>
+        </ul>
+
+        <div class="affiliate-disclosure">
+          <strong>Not medical advice:</strong> This tracker provides estimates based on standard formulas. It does not replace professional medical advice, diagnosis, or treatment. Always consult your own clinician.
+        </div>
+
+        <h2>Related Tools</h2>
+
+        <ul>
+          <li><a href="/pregnancy-test-timing/">Pregnancy Test Timing</a> — when to test for the most accurate result</li>
+          <li><a href="/gestational-age-calculator/">Gestational Age Calculator</a> — how many weeks pregnant are you?</li>
+          <li><a href="/ovulation-calculator/">Ovulation Calculator</a> — when are you most fertile?</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <AdUnit slot="1234567901" format="horizontal" />
+</Base>
+
+<script>
+  import { calculateGestationalAge, formatDate } from '../lib/pregnancy';
+
+  const lmpInput = document.getElementById('lmp') as HTMLInputElement;
+  const cycleInput = document.getElementById('cycle') as HTMLInputElement;
+  const testDateInput = document.getElementById('test-date') as HTMLInputElement;
+  const resultSelect = document.getElementById('result') as HTMLSelectElement;
+  const calcBtn = document.getElementById('calc-btn') as HTMLButtonElement;
+  const resultDiv = document.getElementById('result') as HTMLDivElement;
+  const resultContent = document.getElementById('result-content') as HTMLDivElement;
+
+  calcBtn.addEventListener('click', () => {
+    const lmpVal = lmpInput.value;
+    if (!lmpVal) {
+      alert('Please enter your last menstrual period.');
+      return;
+    }
+
+    const lmp = new Date(lmpVal + 'T00:00:00');
+    const cycleLength = parseInt(cycleInput.value) || 28;
+    const testDate = testDateInput.value
+      ? new Date(testDateInput.value + 'T00:00:00')
+      : new Date();
+    const result = resultSelect.value;
+
+    if (cycleLength < 21 || cycleLength > 45) {
+      alert('Cycle length should be between 21 and 45 days.');
+      return;
+    }
+
+    if (testDate < lmp) {
+      alert('The test date cannot be before your last menstrual period.');
+      return;
+    }
+
+    const ga = calculateGestationalAge({ lmp, cycleLength, referenceDate: testDate });
+
+    let html = `
+      <p><strong>Gestational age at test:</strong> ${ga.weeks} weeks ${ga.days} days</p>
+      <p><strong>Test result:</strong> ${result.charAt(0).toUpperCase() + result.slice(1)}</p>
+    `;
+
+    if (result === 'positive') {
+      html += `<p><strong>Interpretation:</strong> hCG was detected. This is almost always accurate. Contact your healthcare provider to schedule your first prenatal visit.</p>`;
+    } else if (result === 'negative') {
+      html += `<p><strong>Interpretation:</strong> hCG was not detected. If your period is late, wait 3-5 days and test again using your first morning urine.</p>`;
+    } else if (result === 'faint') {
+      html += `<p><strong>Interpretation:</strong> A faint line is usually positive — hCG is present but at low levels. Test again in 2-3 days; the line should get darker as hCG rises.</p>`;
+    }
+
+    resultContent.innerHTML = html;
+    resultDiv.style.display = 'block';
+  });
+</script>

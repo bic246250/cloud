@@ -1,0 +1,169 @@
+---
+import Base from '../layouts/Base.astro';
+import AdUnit from '../components/AdUnit.astro';
+import { getMilestoneDates, formatDate } from '../lib/pregnancy';
+
+const title = 'Pregnancy Milestone Dates';
+const description = 'Dated list of key pregnancy milestones — scans, quickening, viability, term dates. Calculated from your last menstrual period using ACOG guidance.';
+---
+
+<Base title={title} description={description}>
+  <section class="section section-white">
+    <div class="section-inner">
+      <div class="prose">
+    <h1>Pregnancy Milestone Dates</h1>
+
+    <p>Enter your last menstrual period to get a dated list of key pregnancy milestones — scans, quickening, viability, and term dates. All milestones are calculated from your dates and sourced to ACOG, NICHD, and Mayo Clinic.</p>
+
+    <div class="card" id="calculator">
+      <h2 class="mt-0">Calculate Your Milestones</h2>
+
+      <div style="margin-bottom: 1rem;">
+        <label for="lmp" style="display: block; font-weight: 600; margin-bottom: 0.25rem;">Last menstrual period (LMP)</label>
+        <input type="date" id="lmp" name="lmp" required style="width: 100%; padding: 0.5rem; border: 1px solid var(--color-border); border-radius: 4px; font-size: 1rem;" />
+      </div>
+
+      <div style="margin-bottom: 1rem;">
+        <label for="cycle" style="display: block; font-weight: 600; margin-bottom: 0.25rem;">Average cycle length (days)</label>
+        <input type="number" id="cycle" name="cycle" value="28" min="21" max="45" style="width: 100%; padding: 0.5rem; border: 1px solid var(--color-border); border-radius: 4px; font-size: 1rem;" />
+      </div>
+
+      <button id="calc-btn">Calculate</button>
+
+      <div id="result" style="display: none; margin-top: 1.5rem; padding: 1rem; background: var(--color-card-bg); border: 1px solid var(--color-card-border); border-radius: 8px;">
+        <h3 class="mt-0">Your Milestone Dates</h3>
+        <div id="result-content"></div>
+      </div>
+    </div>
+
+    <h2>Key Milestones Explained</h2>
+
+    <h3>Dating / Viability Scan (7-12 weeks)</h3>
+    <p>An early ultrasound can confirm pregnancy, check for a heartbeat, and establish or confirm your due date. ACOG recommends at least one standard ultrasound during pregnancy, typically at 18-22 weeks.</p>
+
+    <h3>First-Trimester Screening (11-13 weeks)</h3>
+    <p>The nuchal translucency (NT) scan measures fluid at the back of the baby's neck. Combined with blood tests, it assesses the risk of certain chromosomal conditions.</p>
+
+    <h3>Embryo → Fetus Transition (Week 11)</h3>
+    <p>ACOG states that the embryo is called a fetus from week 11 onward. By this point, all major organs have formed.</p>
+
+    <h3>Quickening (16-22 weeks)</h3>
+    <p>Quickening is the first fetal movement the mother feels. In first pregnancies, this typically occurs at 18-20 weeks. In subsequent pregnancies, it may be felt earlier (14-18 weeks) because the mother recognizes the sensation.</p>
+
+    <h3>Anatomy Scan (18-22 weeks)</h3>
+    <p>The anatomy scan is a detailed ultrasound that checks the baby's development, including the brain, heart, spine, and other organs. ACOG recommends at least one standard ultrasound at 18-22 weeks.</p>
+
+    <h3>Periviable Period (20 0/7 – 25 6/7 weeks)</h3>
+    <p>The periviable period is the range of gestational ages where survival outside the womb is possible but not guaranteed. ACOG/SMFM Obstetric Care Consensus #6 provides survival statistics:</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Gestational Age</th>
+          <th>Survival Rate</th>
+          <th>Significant Morbidity</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Before 23 weeks</td>
+          <td>5-6%</td>
+          <td>98-100% among survivors</td>
+        </tr>
+        <tr>
+          <td>23 weeks</td>
+          <td>23-27%</td>
+          <td>High</td>
+        </tr>
+        <tr>
+          <td>24 weeks</td>
+          <td>42-59%</td>
+          <td>High</td>
+        </tr>
+        <tr>
+          <td>25 weeks</td>
+          <td>67-76%</td>
+          <td>Moderate</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p><em>Source: ACOG/SMFM Obstetric Care Consensus #6, Periviable Birth.</em></p>
+
+    <div class="affiliate-disclosure">
+      <strong>Important:</strong> ACOG states that "there is no single formally recognized clinical definition of viability." The survival figures above are population averages and do not predict individual outcomes. This table is for informational purposes only and does not replace professional medical advice.
+    </div>
+
+    <h3>Third Trimester Begins (28 0/7 weeks)</h3>
+    <p>The third trimester begins at 28 0/7 weeks. This is when the baby begins rapid growth and the mother may experience new symptoms like shortness of breath and frequent urination.</p>
+
+    <h3>Term (37 0/7 weeks)</h3>
+    <p>ACOG classifies 37 0/7 weeks as "early term." Full term is 39 0/7 – 40 6/7 weeks. Late term is 41 0/7 – 41 6/7 weeks. Postterm is 42 0/7 weeks and beyond.</p>
+
+    <h3>Estimated Due Date (40 0/7 weeks)</h3>
+    <p>The due date is an estimate. Only about 5% of babies are born on their exact due date. Most are born within 2 weeks before or after.</p>
+
+    <h2>When to Talk to Your Clinician</h2>
+
+    <p>Contact your healthcare provider if:</p>
+    <ul>
+      <li>You have questions about any milestone</li>
+      <li>You have not felt movement by 24 weeks</li>
+      <li>You have bleeding, pain, or other concerns</li>
+      <li>You are past your due date</li>
+    </ul>
+
+    <div class="affiliate-disclosure">
+      <strong>Not medical advice:</strong> This calculator provides estimates based on standard formulas and published guidelines. It does not replace professional medical advice, diagnosis, or treatment. Always consult your own clinician.
+    </div>
+
+    <AdUnit slot="1234567896" format="horizontal" />
+
+    <h2>Related Tools</h2>
+
+    <ul>
+      <li><a href="/gestational-age-calculator/">Gestational Age Calculator</a> — full results with gestational age</li>
+      <li><a href="/how-many-weeks-pregnant/">How Many Weeks Pregnant</a> — conversational framing</li>
+      <li><a href="/trimester-calculator/">Trimester Calculator</a> — which trimester are you in?</li>
+      <li><a href="/due-date-calculator/">Due Date Calculator</a> — four modes: LMP, conception, IVF, ultrasound</li>
+    </ul>
+  </div>
+    </div>
+  </section>
+  <script>
+    import { getMilestoneDates, formatDate } from '../lib/pregnancy';
+
+    const lmpInput = document.getElementById('lmp') as HTMLInputElement;
+    const cycleInput = document.getElementById('cycle') as HTMLInputElement;
+    const calcBtn = document.getElementById('calc-btn') as HTMLButtonElement;
+    const resultDiv = document.getElementById('result') as HTMLDivElement;
+    const resultContent = document.getElementById('result-content') as HTMLDivElement;
+
+    calcBtn.addEventListener('click', () => {
+      const lmpVal = lmpInput.value;
+      if (!lmpVal) {
+        alert('Please enter your last menstrual period.');
+        return;
+      }
+
+      const lmp = new Date(lmpVal + 'T00:00:00');
+      const cycleLength = parseInt(cycleInput.value) || 28;
+
+      if (cycleLength < 21 || cycleLength > 45) {
+        alert('Cycle length should be between 21 and 45 days.');
+        return;
+      }
+
+      const milestones = getMilestoneDates(lmp, cycleLength);
+
+      let html = '<ul>';
+      for (const m of milestones) {
+        html += `<li><strong>${m.milestone}:</strong> ${formatDate(m.date)} <span class="text-muted text-small">(${m.week}, ${m.source})</span></li>`;
+      }
+      html += '</ul>';
+
+      resultContent.innerHTML = html;
+      resultDiv.style.display = 'block';
+    });
+  </script>
+</Base>

@@ -1,0 +1,74 @@
+---
+import Base from '../../layouts/Base.astro';
+import AdUnit from '../../components/AdUnit.astro';
+import Icon from '../../components/Icon.astro';
+
+const title = 'Pregnancy Guides';
+const description = 'Expert-reviewed pregnancy guides covering every trimester, symptom, and milestone — sourced to ACOG, NICHD, Mayo Clinic, and NHS.';
+---
+
+<Base title={title} description={description}>
+  <section class="section section-white">
+    <div class="section-inner">
+      <div class="section-header">
+        <h1>Pregnancy Guides</h1>
+        <p>Expert-reviewed guides covering every trimester, symptom, and milestone.</p>
+      </div>
+
+      <div class="card-grid">
+        <a href="/guides/first-trimester/" class="card">
+          <div class="card-icon card-icon-mint"><Icon name="sprout" /></div>
+          <h3>First Trimester</h3>
+          <p>What to expect in weeks 1-13 — symptoms, development, and screening tests.</p>
+        </a>
+        <a href="/guides/second-trimester/" class="card">
+          <div class="card-icon card-icon-mint"><Icon name="flower" /></div>
+          <h3>Second Trimester</h3>
+          <p>Movement, energy, and the anatomy scan — weeks 14-27.</p>
+        </a>
+        <a href="/guides/third-trimester/" class="card">
+          <div class="card-icon card-icon-mint"><Icon name="tree" /></div>
+          <h3>Third Trimester</h3>
+          <p>Preparing for birth, monitoring, and term definitions — weeks 28-40+.</p>
+        </a>
+        <a href="/guides/prenatal-vitamins/" class="card">
+          <div class="card-icon card-icon-peach"><Icon name="pill" /></div>
+          <h3>Prenatal Vitamins</h3>
+          <p>Folic acid, iron, DHA, calcium, and what to look for in a prenatal vitamin.</p>
+        </a>
+        <a href="/guides/pregnancy-weight-gain/" class="card">
+          <div class="card-icon card-icon-peach"><Icon name="scale" /></div>
+          <h3>Pregnancy Weight Gain</h3>
+          <p>Healthy weight gain by BMI, trimester breakdown, and practical tips.</p>
+        </a>
+        <a href="/guides/fetal-development/" class="card">
+          <div class="card-icon card-icon-peach"><Icon name="baby" /></div>
+          <h3>Fetal Development</h3>
+          <p>Week-by-week development from embryo to fetus to full term.</p>
+        </a>
+        <a href="/guides/pregnancy-week-by-week/" class="card">
+          <div class="card-icon card-icon-navy"><Icon name="book" /></div>
+          <h3>Pregnancy Week by Week</h3>
+          <p>What happens to your body and baby at each stage of pregnancy.</p>
+        </a>
+        <a href="/guides/gestational-age-explained/" class="card">
+          <div class="card-icon card-icon-navy"><Icon name="compass" /></div>
+          <h3>Gestational Age Explained</h3>
+          <p>What gestational age means and why it counts from your last period.</p>
+        </a>
+        <a href="/guides/due-date-explained/" class="card">
+          <div class="card-icon card-icon-navy"><Icon name="calendar" /></div>
+          <h3>Due Date Explained</h3>
+          <p>How your due date is calculated and how accurate it really is.</p>
+        </a>
+        <a href="/guides/pregnancy-test-timing/" class="card">
+          <div class="card-icon card-icon-navy"><Icon name="test" /></div>
+          <h3>Pregnancy Test Timing</h3>
+          <p>When to take a pregnancy test for the most accurate result.</p>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <AdUnit slot="1234567899" format="horizontal" />
+</Base>

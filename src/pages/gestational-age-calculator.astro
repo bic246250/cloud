@@ -1,0 +1,223 @@
+---
+import Base from '../layouts/Base.astro';
+import AdUnit from '../components/AdUnit.astro';
+import { calculateGestationalAge, formatDate } from '../lib/pregnancy';
+
+const title = 'Gestational Age Calculator';
+const description = 'Calculate how many weeks and days pregnant you are from your last menstrual period, due date, or ultrasound. ACOG trimester boundaries and term classification.';
+---
+
+<Base title={title} description={description}>
+  <section class="section section-white">
+    <div class="section-inner">
+      <div class="prose">
+    <h1>Gestational Age Calculator</h1>
+
+    <p>Enter your last menstrual period (LMP) to calculate your current gestational age, trimester, and estimated due date. The calculation uses ACOG trimester boundaries and term classification.</p>
+
+    <div class="card" id="calculator">
+      <h2 class="mt-0">Calculate Your Gestational Age</h2>
+
+      <div style="margin-bottom: 1rem;">
+        <label for="lmp" style="display: block; font-weight: 600; margin-bottom: 0.25rem;">Last menstrual period (LMP)</label>
+        <input type="date" id="lmp" name="lmp" required style="width: 100%; padding: 0.5rem; border: 1px solid var(--color-border); border-radius: 4px; font-size: 1rem;" />
+      </div>
+
+      <div style="margin-bottom: 1rem;">
+        <label for="cycle" style="display: block; font-weight: 600; margin-bottom: 0.25rem;">Average cycle length (days)</label>
+        <input type="number" id="cycle" name="cycle" value="28" min="21" max="45" style="width: 100%; padding: 0.5rem; border: 1px solid var(--color-border); border-radius: 4px; font-size: 1rem;" />
+        <p class="text-muted text-small mt-0 mb-0">Default is 28 days. If your cycle is longer or shorter, adjust this for a more accurate due date.</p>
+      </div>
+
+      <div style="margin-bottom: 1rem;">
+        <label for="refdate" style="display: block; font-weight: 600; margin-bottom: 0.25rem;">Calculate from date (optional)</label>
+        <input type="date" id="refdate" name="refdate" style="width: 100%; padding: 0.5rem; border: 1px solid var(--color-border); border-radius: 4px; font-size: 1rem;" />
+        <p class="text-muted text-small mt-0 mb-0">Leave blank to calculate from today.</p>
+      </div>
+
+      <button id="calc-btn">Calculate</button>
+
+      <div id="result" style="display: none; margin-top: 1.5rem; padding: 1rem; background: var(--color-card-bg); border: 1px solid var(--color-card-border); border-radius: 8px;">
+        <h3 class="mt-0">Your Results</h3>
+        <div id="result-content"></div>
+      </div>
+    </div>
+
+    <h2>How It Works</h2>
+
+    <p>Gestational age is calculated from the first day of your last menstrual period (LMP), not from the date of conception. This is the standard method used by healthcare providers and is recommended by ACOG.</p>
+
+    <h3>The Formula</h3>
+
+    <p><strong>Cycle-corrected LMP</strong> = LMP + (cycle length − 28)</p>
+
+    <p><strong>Estimated due date (EDD)</strong> = Cycle-corrected LMP + 280 days</p>
+
+    <p><strong>Gestational age</strong> = Reference date − Cycle-corrected LMP</p>
+
+    <p>The result is expressed in weeks and days. For example, 22 weeks and 3 days is written as 22+3.</p>
+
+    <h3>Why Cycle Length Matters</h3>
+
+    <p>The standard pregnancy calculation assumes a 28-day cycle. If your cycle is longer, ovulation likely occurred later, and your due date should be adjusted forward. If your cycle is shorter, ovulation likely occurred earlier.</p>
+
+    <p>Many calculators ignore this adjustment entirely. We include it because it is the most common source of error in pregnancy dating.</p>
+
+    <h2>ACOG Trimester Boundaries</h2>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Trimester</th>
+          <th>Weeks</th>
+          <th>Days</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>First</td>
+          <td>0 0/7 – 13 6/7</td>
+          <td>0 – 97</td>
+        </tr>
+        <tr>
+          <td>Second</td>
+          <td>14 0/7 – 27 6/7</td>
+          <td>98 – 195</td>
+        </tr>
+        <tr>
+          <td>Third</td>
+          <td>28 0/7 – birth</td>
+          <td>196+</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p><em>Source: ACOG Committee Opinion, Definition of Term Pregnancy.</em></p>
+
+    <h2>ACOG Term Classification</h2>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Classification</th>
+          <th>Weeks</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Preterm</td>
+          <td>Before 37 0/7</td>
+        </tr>
+        <tr>
+          <td>Early term</td>
+          <td>37 0/7 – 38 6/7</td>
+        </tr>
+        <tr>
+          <td>Full term</td>
+          <td>39 0/7 – 40 6/7</td>
+        </tr>
+        <tr>
+          <td>Late term</td>
+          <td>41 0/7 – 41 6/7</td>
+        </tr>
+        <tr>
+          <td>Postterm</td>
+          <td>42 0/7 and beyond</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p><em>Source: ACOG Committee Opinion, Definition of Term Pregnancy.</em></p>
+
+    <h2>What This Calculator Does Not Tell You</h2>
+
+    <ul>
+      <li><strong>It does not confirm pregnancy.</strong> Only a pregnancy test or ultrasound can do that.</li>
+      <li><strong>It does not account for irregular cycles.</strong> If your cycle varies significantly, the calculation is less reliable.</li>
+      <li><strong>It does not replace ultrasound dating.</strong> A first-trimester ultrasound is more accurate than LMP-based dating and may change your due date by up to a week.</li>
+      <li><strong>It does not predict your delivery date.</strong> Only about 5% of babies are born on their exact due date.</li>
+    </ul>
+
+    <h2>When to Talk to Your Clinician</h2>
+
+    <p>Contact your healthcare provider if:</p>
+    <ul>
+      <li>You are unsure of your LMP date</li>
+      <li>Your cycles are irregular</li>
+      <li>You have bleeding or pain</li>
+      <li>You have questions about your due date or gestational age</li>
+    </ul>
+
+    <div class="affiliate-disclosure">
+      <strong>Not medical advice:</strong> This calculator provides an estimate based on standard formulas. It does not replace professional medical advice, diagnosis, or treatment. Always consult your own clinician.
+    </div>
+
+    <AdUnit slot="1234567890" format="horizontal" />
+
+    <h2>Related Tools</h2>
+
+    <ul>
+      <li><a href="/how-many-weeks-pregnant/">How Many Weeks Pregnant</a> — same calculation, conversational framing</li>
+      <li><a href="/trimester-calculator/">Trimester Calculator</a> — which trimester are you in?</li>
+      <li><a href="/due-date-calculator/">Due Date Calculator</a> — four modes: LMP, conception, IVF, ultrasound</li>
+      <li><a href="/pregnancy-milestone-dates/">Pregnancy Milestone Dates</a> — dated list of key milestones</li>
+    </ul>
+  </div>
+    </div>
+  </section>
+  <script>
+    import { calculateGestationalAge, formatDate } from '../lib/pregnancy';
+
+    const lmpInput = document.getElementById('lmp') as HTMLInputElement;
+    const cycleInput = document.getElementById('cycle') as HTMLInputElement;
+    const refDateInput = document.getElementById('refdate') as HTMLInputElement;
+    const calcBtn = document.getElementById('calc-btn') as HTMLButtonElement;
+    const resultDiv = document.getElementById('result') as HTMLDivElement;
+    const resultContent = document.getElementById('result-content') as HTMLDivElement;
+
+    calcBtn.addEventListener('click', () => {
+      const lmpVal = lmpInput.value;
+      if (!lmpVal) {
+        alert('Please enter your last menstrual period.');
+        return;
+      }
+
+      const lmp = new Date(lmpVal + 'T00:00:00');
+      const cycleLength = parseInt(cycleInput.value) || 28;
+      const refDate = refDateInput.value
+        ? new Date(refDateInput.value + 'T00:00:00')
+        : new Date();
+
+      if (cycleLength < 21 || cycleLength > 45) {
+        alert('Cycle length should be between 21 and 45 days.');
+        return;
+      }
+
+      if (refDate < lmp) {
+        alert('The calculate-from date cannot be before your last menstrual period.');
+        return;
+      }
+
+      const result = calculateGestationalAge({ lmp, cycleLength, referenceDate: refDate });
+
+      const trimesterNames = ['', 'First', 'Second', 'Third'];
+      const trimesterLabel = trimesterNames[result.trimester];
+
+      let html = `
+        <p><strong>Gestational age:</strong> ${result.weeks} weeks ${result.days} days (${result.weeks}+${result.days})</p>
+        <p><strong>Trimester:</strong> ${trimesterLabel} trimester</p>
+        <p><strong>Trimester dates:</strong> ${formatDate(result.trimesterStart)} – ${formatDate(result.trimesterEnd)}</p>
+        <p><strong>Estimated due date:</strong> ${formatDate(result.estimatedDueDate)}</p>
+        <p><strong>Days until due date:</strong> ${result.daysUntilDue >= 0 ? result.daysUntilDue + ' days' : Math.abs(result.daysUntilDue) + ' days past due'}</p>
+        <p><strong>Term classification:</strong> ${result.termClassification}</p>
+      `;
+
+      if (result.isPostterm) {
+        html += `<p style="color: #c0392b; font-weight: 600;">You are past your estimated due date. Please contact your healthcare provider.</p>`;
+      }
+
+      resultContent.innerHTML = html;
+      resultDiv.style.display = 'block';
+    });
+  </script>
+</Base>

@@ -1,0 +1,146 @@
+---
+import Base from '../layouts/Base.astro';
+import AdUnit from '../components/AdUnit.astro';
+import { calculateConceptionWindow, calculateDueDateFromConception, formatDate } from '../lib/pregnancy';
+
+const title = 'Conception Date Calculator';
+const description = 'Estimate your conception date and fertile window from your last menstrual period or due date. Understand why conception date cannot be determined precisely.';
+---
+
+<Base title={title} description={description}>
+  <section class="section section-white">
+    <div class="section-inner">
+      <div class="prose">
+    <h1>Conception Date Calculator</h1>
+
+    <p>Estimate your conception window and fertile window from your last menstrual period or due date. Understand why conception date cannot be determined precisely.</p>
+
+    <div class="card" id="calculator">
+      <h2 class="mt-0">Calculate</h2>
+
+      <div style="margin-bottom: 1rem;">
+        <label for="lmp" style="display: block; font-weight: 600; margin-bottom: 0.25rem;">Last menstrual period (LMP)</label>
+        <input type="date" id="lmp" name="lmp" required style="width: 100%; padding: 0.5rem; border: 1px solid var(--color-border); border-radius: 4px; font-size: 1rem;" />
+      </div>
+
+      <div style="margin-bottom: 1rem;">
+        <label for="cycle" style="display: block; font-weight: 600; margin-bottom: 0.25rem;">Average cycle length (days)</label>
+        <input type="number" id="cycle" name="cycle" value="28" min="21" max="45" style="width: 100%; padding: 0.5rem; border: 1px solid var(--color-border); border-radius: 4px; font-size: 1rem;" />
+      </div>
+
+      <button id="calc-btn">Calculate</button>
+
+      <div id="result" style="display: none; margin-top: 1.5rem; padding: 1rem; background: var(--color-card-bg); border: 1px solid var(--color-card-border); border-radius: 8px;">
+        <h3 class="mt-0">Your Results</h3>
+        <div id="result-content"></div>
+      </div>
+    </div>
+
+    <h2>Why Conception Date Cannot Be Determined Precisely</h2>
+
+    <p>This is the most important thing to understand about this calculator: <strong>conception date cannot be determined precisely from LMP or due date.</strong></p>
+
+    <p>There are too many unknowns:</p>
+    <ul>
+      <li>Sperm can survive in the reproductive tract for up to 5 days</li>
+      <li>The egg is viable for only 12-24 hours after ovulation</li>
+      <li>Ovulation can vary from cycle to cycle, even in people with regular cycles</li>
+      <li>The exact moment of fertilization cannot be observed without medical intervention</li>
+    </ul>
+
+    <p>BabyCenter states this plainly: "It's impossible to calculate the conception date precisely. There are too many unknowns."</p>
+
+    <p>What we can do is estimate a <strong>fertile window</strong> — the days when conception is most likely — and an <strong>approximate conception date</strong> based on average cycle patterns.</p>
+
+    <h2>The Calculation</h2>
+
+    <p><strong>Ovulation date</strong> = LMP + (cycle length − 14)</p>
+
+    <p>This assumes ovulation occurs about 14 days before the next expected period. For a 28-day cycle, this is day 14. For a 32-day cycle, this is day 18.</p>
+
+    <p><strong>Fertile window</strong> = 5 days before ovulation to 1 day after ovulation</p>
+
+    <p>This accounts for sperm survival (up to 5 days) and egg viability (12-24 hours).</p>
+
+    <p><strong>Estimated conception date</strong> = ovulation date</p>
+
+    <p>This is the most likely single date, but conception could have occurred anywhere in the fertile window.</p>
+
+    <h2>How Accurate Is This?</h2>
+
+    <p>The estimate is most accurate if:</p>
+    <ul>
+      <li>Your cycles are regular</li>
+      <li>You know the date of your last period</li>
+      <li>You are not currently breastfeeding or have recently stopped hormonal contraception</li>
+    </ul>
+
+    <p>If you know the date of conception (for example, from IVF or known intercourse), you can calculate your due date more precisely: <strong>due date = conception date + 266 days</strong>.</p>
+
+    <h2>When to Talk to Your Clinician</h2>
+
+    <p>Contact your healthcare provider if:</p>
+    <ul>
+      <li>You are trying to conceive and have questions about timing</li>
+      <li>Your cycles are irregular</li>
+      <li>You have been trying to conceive for 12 months (or 6 months if you are over 35)</li>
+      <li>You have questions about your due date</li>
+    </ul>
+
+    <div class="affiliate-disclosure">
+      <strong>Not medical advice:</strong> This calculator provides an estimate based on standard formulas. It does not replace professional medical advice, diagnosis, or treatment. Always consult your own clinician.
+    </div>
+
+    <AdUnit slot="1234567895" format="horizontal" />
+
+    <h2>Related Tools</h2>
+
+    <ul>
+      <li><a href="/gestational-age-calculator/">Gestational Age Calculator</a> — full results with gestational age</li>
+      <li><a href="/how-many-weeks-pregnant/">How Many Weeks Pregnant</a> — conversational framing</li>
+      <li><a href="/trimester-calculator/">Trimester Calculator</a> — which trimester are you in?</li>
+      <li><a href="/due-date-calculator/">Due Date Calculator</a> — four modes: LMP, conception, IVF, ultrasound</li>
+    </ul>
+  </div>
+    </div>
+  </section>
+  <script>
+    import { calculateConceptionWindow, calculateDueDateFromConception, formatDate } from '../lib/pregnancy';
+
+    const lmpInput = document.getElementById('lmp') as HTMLInputElement;
+    const cycleInput = document.getElementById('cycle') as HTMLInputElement;
+    const calcBtn = document.getElementById('calc-btn') as HTMLButtonElement;
+    const resultDiv = document.getElementById('result') as HTMLDivElement;
+    const resultContent = document.getElementById('result-content') as HTMLDivElement;
+
+    calcBtn.addEventListener('click', () => {
+      const lmpVal = lmpInput.value;
+      if (!lmpVal) {
+        alert('Please enter your last menstrual period.');
+        return;
+      }
+
+      const lmp = new Date(lmpVal + 'T00:00:00');
+      const cycleLength = parseInt(cycleInput.value) || 28;
+
+      if (cycleLength < 21 || cycleLength > 45) {
+        alert('Cycle length should be between 21 and 45 days.');
+        return;
+      }
+
+      const result = calculateConceptionWindow({ lmp, cycleLength });
+      const dueDate = calculateDueDateFromConception(result.conceptionDate);
+
+      let html = `
+        <p><strong>Estimated conception date:</strong> ${formatDate(result.conceptionDate)}</p>
+        <p><strong>Fertile window:</strong> ${formatDate(result.fertileWindowStart)} – ${formatDate(result.fertileWindowEnd)}</p>
+        <p><strong>Estimated ovulation date:</strong> ${formatDate(result.ovulationDate)}</p>
+        <p><strong>Estimated due date (from conception):</strong> ${formatDate(dueDate)}</p>
+        <p class="text-muted text-small">Note: Conception date is an estimate. The fertile window is the range of days when conception is most likely.</p>
+      `;
+
+      resultContent.innerHTML = html;
+      resultDiv.style.display = 'block';
+    });
+  </script>
+</Base>

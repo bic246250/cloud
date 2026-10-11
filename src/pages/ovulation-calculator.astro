@@ -1,0 +1,156 @@
+---
+import Base from '../layouts/Base.astro';
+import AdUnit from '../components/AdUnit.astro';
+import Icon from '../components/Icon.astro';
+import { calculateConceptionWindow, formatDate } from '../lib/pregnancy';
+
+const title = 'Ovulation Calculator';
+const description = 'Calculate your ovulation date and fertile window from your last menstrual period and cycle length. Know your most fertile days.';
+---
+
+<Base title={title} description={description}>
+  <section class="section section-white">
+    <div class="section-inner">
+      <div class="prose">
+        <h1>Ovulation Calculator</h1>
+
+        <p>Enter your last menstrual period and average cycle length to estimate your ovulation date and fertile window — the days when conception is most likely.</p>
+
+        <div class="card" id="calculator">
+          <h2 class="mt-0">Calculate Your Ovulation</h2>
+
+          <div style="margin-bottom: 1rem;">
+            <label for="lmp" style="display: block; font-weight: 600; margin-bottom: 0.25rem;">Last menstrual period (LMP)</label>
+            <input type="date" id="lmp" name="lmp" required style="width: 100%; padding: 0.5rem; border: 1px solid var(--border); border-radius: 4px; font-size: 1rem;" />
+          </div>
+
+          <div style="margin-bottom: 1rem;">
+            <label for="cycle" style="display: block; font-weight: 600; margin-bottom: 0.25rem;">Average cycle length (days)</label>
+            <input type="number" id="cycle" name="cycle" value="28" min="21" max="45" style="width: 100%; padding: 0.5rem; border: 1px solid var(--border); border-radius: 4px; font-size: 1rem;" />
+            <p class="text-muted text-small mt-0 mb-0">Default is 28 days. If your cycle is longer or shorter, adjust this for a more accurate estimate.</p>
+          </div>
+
+          <button id="calc-btn">Calculate</button>
+
+          <div id="result" style="display: none; margin-top: 1.5rem; padding: 1rem; background: var(--mint); border: 1px solid var(--teal); border-radius: 8px;">
+            <h3 class="mt-0">Your Results</h3>
+            <div id="result-content"></div>
+          </div>
+        </div>
+
+        <h2>How It Works</h2>
+
+        <p>Ovulation typically occurs about 14 days before the next expected period. For a 28-day cycle, this is day 14. For a 32-day cycle, this is day 18.</p>
+
+        <h3>The Formula</h3>
+
+        <p><strong>Ovulation date</strong> = LMP + (cycle length − 14)</p>
+
+        <p><strong>Fertile window</strong> = 5 days before ovulation to 1 day after ovulation</p>
+
+        <p>This accounts for sperm survival (up to 5 days) and egg viability (12-24 hours).</p>
+
+        <h2>Your Fertile Window</h2>
+
+        <p>The fertile window is the 6-day period when conception is most likely. It includes the 5 days before ovulation and the day of ovulation itself.</p>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Phase</th>
+              <th>Days</th>
+              <th>Conception Likelihood</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>5 days before ovulation</td>
+              <td>Day -5 to Day -1</td>
+              <td>Moderate</td>
+            </tr>
+            <tr>
+              <td>Day of ovulation</td>
+              <td>Day 0</td>
+              <td>Highest</td>
+            </tr>
+            <tr>
+              <td>1 day after ovulation</td>
+              <td>Day +1</td>
+              <td>Low</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h2>Tips for Tracking Ovulation</h2>
+
+        <ul>
+          <li><strong>Basal body temperature (BBT):</strong> Your BBT rises slightly (0.5-1°F) after ovulation. Tracking BBT over several cycles can help predict ovulation.</li>
+          <li><strong>Cervical mucus:</strong> Around ovulation, cervical mucus becomes clear, stretchy, and slippery — like egg whites.</li>
+          <li><strong>Ovulation predictor kits (OPKs):</strong> These detect the luteinizing hormone (LH) surge that occurs 24-36 hours before ovulation.</li>
+          <li><strong>Calendar method:</strong> Track your cycles over several months to identify patterns.</li>
+        </ul>
+
+        <h2>When to Talk to Your Clinician</h2>
+
+        <p>Contact your healthcare provider if:</p>
+        <ul>
+          <li>Your cycles are irregular (varying by more than 7 days)</li>
+          <li>You have been trying to conceive for 12 months (or 6 months if you are over 35)</li>
+          <li>You have questions about your fertility or ovulation</li>
+        </ul>
+
+        <div class="affiliate-disclosure">
+          <strong>Not medical advice:</strong> This calculator provides an estimate based on standard formulas. It does not replace professional medical advice, diagnosis, or treatment. Always consult your own clinician.
+        </div>
+
+        <h2>Related Tools</h2>
+
+        <ul>
+          <li><a href="/conception-date-calculator/">Conception Date Calculator</a> — estimate your conception window</li>
+          <li><a href="/gestational-age-calculator/">Gestational Age Calculator</a> — how many weeks pregnant are you?</li>
+          <li><a href="/pregnancy-test-timing/">Pregnancy Test Timing</a> — when to take a pregnancy test</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <AdUnit slot="1234567900" format="horizontal" />
+</Base>
+
+<script>
+  import { calculateConceptionWindow, formatDate } from '../lib/pregnancy';
+
+  const lmpInput = document.getElementById('lmp') as HTMLInputElement;
+  const cycleInput = document.getElementById('cycle') as HTMLInputElement;
+  const calcBtn = document.getElementById('calc-btn') as HTMLButtonElement;
+  const resultDiv = document.getElementById('result') as HTMLDivElement;
+  const resultContent = document.getElementById('result-content') as HTMLDivElement;
+
+  calcBtn.addEventListener('click', () => {
+    const lmpVal = lmpInput.value;
+    if (!lmpVal) {
+      alert('Please enter your last menstrual period.');
+      return;
+    }
+
+    const lmp = new Date(lmpVal + 'T00:00:00');
+    const cycleLength = parseInt(cycleInput.value) || 28;
+
+    if (cycleLength < 21 || cycleLength > 45) {
+      alert('Cycle length should be between 21 and 45 days.');
+      return;
+    }
+
+    const result = calculateConceptionWindow({ lmp, cycleLength });
+
+    let html = `
+      <p><strong>Estimated ovulation date:</strong> ${formatDate(result.ovulationDate)}</p>
+      <p><strong>Fertile window:</strong> ${formatDate(result.fertileWindowStart)} – ${formatDate(result.fertileWindowEnd)}</p>
+      <p><strong>Estimated conception date:</strong> ${formatDate(result.conceptionDate)}</p>
+      <p class="text-muted text-small">Note: Ovulation date is an estimate. The fertile window is the range of days when conception is most likely.</p>
+    `;
+
+    resultContent.innerHTML = html;
+    resultDiv.style.display = 'block';
+  });
+</script>
