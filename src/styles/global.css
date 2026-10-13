@@ -200,7 +200,7 @@ p {
   color: var(--navy);
 }
 
-@media (max-width: 1280px) {
+@media (max-width: 1400px) {
   .nav-toggle {
     display: block;
   }
