@@ -1,0 +1,22 @@
+---
+import Base from '../layouts/Base.astro';
+
+const title = 'Getting your PDF';
+const description = 'Redirecting to your download...';
+---
+
+<Base title={title} description={description}>
+  <section class="section section-mint" style="padding: 4rem 1.5rem; text-align: center;">
+    <div class="section-inner" style="max-width: 500px;">
+      <h1 style="color: var(--navy); margin-bottom: 1rem;">Getting your PDF...</h1>
+      <p style="color: var(--text-light);">Redirecting to your download. If nothing happens, <a href="/download/pregnancy-weight-gain-system/" style="color: var(--teal);">click here</a>.</p>
+    </div>
+  </section>
+  <script>
+    // Extract token from URL hash: /get-pdf/#token
+    const hash = window.location.hash.slice(1);
+    if (hash) {
+      window.location.replace('/download-pdf?token=' + encodeURIComponent(hash));
+    }
+  </script>
+</Base>
