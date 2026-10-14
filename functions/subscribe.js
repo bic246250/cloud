@@ -105,9 +105,14 @@ async function handlePost(request, env) {
     resubscribe: true,
   };
 
-  // Add due_date as custom field if provided
-  if (due_date) {
-    payload.fields = { due_date };
+  // Add due_date and download_token as custom fields
+  const fields = {};
+  if (due_date) fields.due_date = due_date;
+  // Generate token first so we can store it in MailerLite too
+  const downloadToken = crypto.randomUUID();
+  fields.download_token = downloadToken;
+  if (Object.keys(fields).length > 0) {
+    payload.fields = fields;
   }
 
   // Call MailerLite API
@@ -125,8 +130,7 @@ async function handlePost(request, env) {
     const data = await resp.json();
 
     if (resp.ok) {
-      // Generate a unique download token and store in KV
-      const downloadToken = crypto.randomUUID();
+      // Store the pre-generated token in KV
       await env.PDF_TOKENS.put(downloadToken, email.trim().toLowerCase(), {
         expirationTtl: 2592000, // 30 days
       });
