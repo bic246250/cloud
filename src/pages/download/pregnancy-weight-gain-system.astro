@@ -1,0 +1,259 @@
+---
+import Base from '../../layouts/Base.astro';
+import AdUnit from '../../components/AdUnit.astro';
+
+const title = 'Pregnancy Weight Gain Control System — Free PDF';
+const description = 'A trimester-by-trimester weight gain control system with nutrition targets, food lists, and a weekly check-in framework. Free PDF download.';
+const canonical = 'https://bumpcompass.com/download/pregnancy-weight-gain-system/';
+---
+
+<Base title={title} description={description} canonical={canonical}>
+  <!-- Hero -->
+  <section class="section section-mint" style="padding: 3rem 1.5rem;">
+    <div class="section-inner" style="text-align: center; max-width: 700px;">
+      <h1 style="font-size: 2.5rem; color: var(--navy); margin-bottom: 0.5rem;">
+        Pregnancy Weight Gain Control System
+      </h1>
+      <p style="font-size: 1.2rem; color: var(--text-light); margin-bottom: 1.5rem;">
+        A trimester-by-trimester framework with nutrition targets, food lists, and a weekly check-in system.
+      </p>
+      <a href="#get-pdf" class="btn btn-primary" style="font-size: 1.1rem; padding: 1rem 2rem; text-decoration: none; display: inline-block;">
+        Send me the free PDF
+      </a>
+    </div>
+  </section>
+
+  <!-- What's Inside -->
+  <section class="section section-white">
+    <div class="section-inner">
+      <div class="section-header">
+        <h2>What's Inside</h2>
+        <p>Three parts that work together: track, nourish, and adjust.</p>
+      </div>
+
+      <div class="card-grid">
+        <div class="card">
+          <div class="card-icon card-icon-mint">📊</div>
+          <h3>The Control System</h3>
+          <p>How to track and adjust your weight gain week by week, based on your pre-pregnancy BMI. Includes a 12-week tracker and check-in prompts.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon card-icon-peach">🥗</div>
+          <h3>Nutrition Board</h3>
+          <p>Daily targets for calories, protein, and 6 key micronutrients — folate, iron, DHA, choline, calcium, and vitamin D — mapped to real foods.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon card-icon-navy">🍽️</div>
+          <h3>Trimester Meal Frameworks</h3>
+          <p>Sample meal structures for each trimester, with pregnancy-safe food swaps and portion guidance. Includes foods to avoid.</p>
+        </div>
+      </div>
+
+      <AdUnit slot="2263226824" format="auto" />
+    </div>
+  </section>
+
+  <!-- Why It's Different -->
+  <section class="section section-mint">
+    <div class="section-inner">
+      <div class="section-header">
+        <h2>Why It's Different</h2>
+        <p>Not blog advice. A system built on clinical guidelines.</p>
+      </div>
+
+      <div class="prose" style="max-width: 700px; margin: 0 auto;">
+        <ul style="font-size: 1.1rem; line-height: 1.8; color: var(--text);">
+          <li><strong>Based on IOM/ACOG guidelines</strong> — not blog advice or anecdotal tips</li>
+          <li><strong>Shows where guidelines disagree</strong> — and what that means for you</li>
+          <li><strong>Nutrition board maps micros to foods</strong> — not just numbers on a page</li>
+          <li><strong>Built for first-time moms</strong> — who want a system, not just information</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- What You'll Get -->
+  <section class="section section-white">
+    <div class="section-inner">
+      <div class="section-header">
+        <h2>What You'll Get</h2>
+        <p>Everything you need to stay on track.</p>
+      </div>
+
+      <div class="prose" style="max-width: 700px; margin: 0 auto;">
+        <ul style="font-size: 1.1rem; line-height: 1.8; color: var(--text);">
+          <li>Weight gain tracker by week and trimester</li>
+          <li>BMI-based target ranges (IOM/ACOG)</li>
+          <li>Daily nutrition targets — calories, protein, 6 key micros</li>
+          <li>Food lists: what to prioritize, what to limit</li>
+          <li>3 trimester meal frameworks with sample days</li>
+          <li>Weekly check-in prompts</li>
+          <li>"When to call your clinician" red flags</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- The Form -->
+  <section class="section section-mint" id="get-pdf">
+    <div class="section-inner" style="max-width: 500px;">
+      <div class="section-header">
+        <h2>Get the Free PDF</h2>
+        <p>Enter your email. We'll send the PDF instantly.</p>
+      </div>
+
+      <div class="card" style="padding: 2rem;">
+        <form id="subscribe-form" style="display: flex; flex-direction: column; gap: 1rem;">
+          <div>
+            <label for="email" style="display: block; font-weight: 700; color: var(--navy); margin-bottom: 0.25rem;">
+              Email address
+            </label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              required
+              placeholder="you@example.com"
+              style="width: 100%; padding: 0.75rem; border: 1px solid var(--border); border-radius: var(--radius-sm); font-size: 1rem; font-family: var(--font);"
+            />
+          </div>
+
+          <div>
+            <label for="due_date" style="display: block; font-weight: 700; color: var(--navy); margin-bottom: 0.25rem;">
+              Due date or week of pregnancy <span style="font-weight: 400; color: var(--text-light);">(optional)</span>
+            </label>
+            <input
+              type="text"
+              id="due_date"
+              name="due_date"
+              placeholder="e.g., 2026-03-15 or Week 20"
+              style="width: 100%; padding: 0.75rem; border: 1px solid var(--border); border-radius: var(--radius-sm); font-size: 1rem; font-family: var(--font);"
+            />
+          </div>
+
+          <div style="display: flex; align-items: flex-start; gap: 0.5rem;">
+            <input
+              type="checkbox"
+              id="consent"
+              name="consent"
+              required
+              style="margin-top: 0.25rem;"
+            />
+            <label for="consent" style="font-size: 0.9rem; color: var(--text-light);">
+              I agree to receive emails from Bump Compass. I can unsubscribe at any time.
+            </label>
+          </div>
+
+          <button
+            type="submit"
+            id="submit-btn"
+            class="btn btn-primary"
+            style="width: 100%; padding: 1rem; font-size: 1.1rem; border: none; cursor: pointer;"
+          >
+            Send me the PDF
+          </button>
+        </form>
+
+        <div id="form-success" style="display: none; text-align: center; padding: 1rem 0;">
+          <p style="font-size: 1.2rem; color: var(--teal); font-weight: 700; margin-bottom: 0.5rem;">
+            ✓ Check your inbox!
+          </p>
+          <p style="color: var(--text-light);">
+            The PDF is on its way. You'll also get a confirmation email — click the link to confirm your subscription.
+          </p>
+          <p style="margin-top: 1rem;">
+            <a href="/guides/pregnancy-weight-gain/" style="color: var(--teal); font-weight: 700;">
+              Read the free guide while you wait →
+            </a>
+          </p>
+        </div>
+
+        <div id="form-error" style="display: none; padding: 0.75rem; background: #fee2e2; border-radius: var(--radius-sm); color: #dc2626; font-size: 0.9rem; margin-top: 0.5rem;">
+        </div>
+      </div>
+
+      <p style="text-align: center; font-size: 0.8rem; color: var(--text-light); margin-top: 1rem;">
+        We use MailerLite to send your PDF. Your email is never sold or shared.
+        See our <a href="/privacy-policy/" style="color: var(--teal);">Privacy Policy</a>.
+      </p>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section section-white">
+    <div class="section-inner" style="max-width: 700px;">
+      <div class="section-header">
+        <h2>Questions</h2>
+      </div>
+
+      <div class="prose">
+        <h3>Is this medical advice?</h3>
+        <p>No. This system is based on IOM/ACOG guidelines and is for informational purposes only. Always consult your own clinician before making changes to your diet or exercise routine.</p>
+
+        <h3>What if I'm outside the US?</h3>
+        <p>The guidelines are from US-based organizations (IOM/ACOG). If you're in the UK, Canada, or Australia, your clinician may use different targets. The nutrition board and meal frameworks are universally applicable.</p>
+
+        <h3>Can I share this with my partner or midwife?</h3>
+        <p>Absolutely. This system is designed to be shared. Bring it to your appointments and use it as a conversation starter with your care team.</p>
+
+        <h3>What format is the PDF?</h3>
+        <p>A standard PDF that works on any device — phone, tablet, or computer. You can print it or keep it digital.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Final CTA -->
+  <section class="section section-mint" style="text-align: center;">
+    <div class="section-inner" style="max-width: 500px;">
+      <h2 style="color: var(--navy); margin-bottom: 0.5rem;">Ready to get started?</h2>
+      <p style="color: var(--text-light); margin-bottom: 1.5rem;">Enter your email above and we'll send the PDF right away.</p>
+      <a href="#get-pdf" class="btn btn-primary" style="font-size: 1.1rem; padding: 1rem 2rem; text-decoration: none; display: inline-block;">
+        Get the free PDF
+      </a>
+    </div>
+  </section>
+</Base>
+
+<script>
+  const form = document.getElementById('subscribe-form') as HTMLFormElement;
+  const successDiv = document.getElementById('form-success') as HTMLDivElement;
+  const errorDiv = document.getElementById('form-error') as HTMLDivElement;
+  const submitBtn = document.getElementById('submit-btn') as HTMLButtonElement;
+
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    errorDiv.style.display = 'none';
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Sending...';
+
+    const formData = new FormData(form);
+    const email = formData.get('email') as string;
+    const due_date = formData.get('due_date') as string;
+    const consent = formData.get('consent') === 'on';
+
+    try {
+      const resp = await fetch('/functions/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, due_date, consent }),
+      });
+
+      const data = await resp.json();
+
+      if (data.ok) {
+        form.style.display = 'none';
+        successDiv.style.display = 'block';
+      } else {
+        errorDiv.textContent = data.error || 'Something went wrong. Please try again.';
+        errorDiv.style.display = 'block';
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Send me the PDF';
+      }
+    } catch (err) {
+      errorDiv.textContent = 'Network error. Please try again.';
+      errorDiv.style.display = 'block';
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Send me the PDF';
+    }
+  });
+</script>
