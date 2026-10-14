@@ -1,4 +1,9 @@
 User-agent: *
-Allow: /
+Disallow: /download-pdf
+Disallow: /downloads/
+Disallow: /download/pregnancy-weight-gain-system/
 
-Sitemap: https://bumpcompass.com/sitemap.xml
+User-agent: Googlebot
+Disallow: /download-pdf
+Disallow: /downloads/
+Disallow: /download/pregnancy-weight-gain-system/

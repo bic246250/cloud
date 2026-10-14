@@ -125,9 +125,16 @@ async function handlePost(request, env) {
     const data = await resp.json();
 
     if (resp.ok) {
+      // Generate a unique download token and store in KV
+      const downloadToken = crypto.randomUUID();
+      await env.PDF_TOKENS.put(downloadToken, email.trim().toLowerCase(), {
+        expirationTtl: 2592000, // 30 days
+      });
+
       return json({
         ok: true,
         message: "Check your inbox — the PDF is on its way.",
+        download_token: downloadToken,
       });
     }
 

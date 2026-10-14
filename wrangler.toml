@@ -1,3 +1,7 @@
 name = "bumpcompass"
 pages_build_output_dir = "dist"
 compatibility_date = "2024-01-01"
+
+[[kv_namespaces]]
+binding = "PDF_TOKENS"
+id = "b4e95ffbf5f24058beb2000926ceae4e"
