@@ -1,0 +1,281 @@
+LEAD MAGNET PAGE + FORM HANDLER — SPEC v0.1
+bumpcompass.com
+Date: 2026-10-13
+Author: Agent (for bic review)
+
+================================================================================
+1. WHAT WE'RE BUILDING
+================================================================================
+
+A dedicated landing page that trades an email address for the Pregnancy
+Weight Gain Control System PDF. Plus a server-side form handler that
+forwards submissions to MailerLite.
+
+Two files to create:
+  - src/pages/download/pregnancy-weight-gain-system.astro   (the page)
+  - functions/subscribe.js                                  (the handler)
+
+Plus one config file:
+  - wrangler.toml                                           (Pages Functions binding)
+
+No new npm dependencies. Astro 7 is already installed.
+
+================================================================================
+2. WHY A PAGES FUNCTION (not a client-side form)
+================================================================================
+
+The MailerLite API key must never reach the browser. A Pages Function
+keeps it in Cloudflare's server-side environment (secrets), so:
+
+  - No API key in source code or git history
+  - No CORS issues (same-origin POST)
+  - Can validate and sanitize input before forwarding
+  - Can return structured JSON for client-side success/error display
+
+Cloudflare Pages Functions are already supported by the hosting plan.
+No extra cost, no extra infrastructure.
+
+================================================================================
+3. PAGE: /download/pregnancy-weight-gain-system/
+================================================================================
+
+3.1 PURPOSE
+  Convert a visitor into a subscriber by offering the PDF as a lead magnet.
+  The page must communicate: what the PDF contains, why it's different,
+  and what happens after they enter their email.
+
+3.2 SEO / INDEXING
+  - title: "Pregnancy Weight Gain Control System — Free PDF | Bump Compass"
+  - description: "A trimester-by-trimester weight gain control system with
+    nutrition targets, food lists, and weekly check-in framework. Free PDF."
+  - canonical: https://bumpcompass.com/download/pregnancy-weight-gain-system/
+  - No noindex. This page should rank.
+  - JSON-LD: CreativeWork (name, description, author "Bump Compass Editorial")
+
+3.3 PAGE STRUCTURE (top to bottom)
+
+  A. HERO
+     - H1: "Pregnancy Weight Gain Control System"
+     - Subtitle: "A trimester-by-trimester framework with nutrition targets,
+       food lists, and a weekly check-in system. Free PDF — instant download."
+     - CTA button: "Send me the free PDF" → scrolls to form
+
+  B. WHAT'S INSIDE (the value proposition)
+     Three cards or sections:
+       1. "The Control System" — How to track and adjust your weight gain
+          week by week, based on your pre-pregnancy BMI.
+       2. "Nutrition Board" — Daily targets for calories, protein, and
+          key micronutrients (folate, iron, DHA, choline, calcium, vitamin D),
+          mapped to real foods.
+       3. "Trimester Meal Frameworks" — Sample meal structures for each
+          trimester, with pregnancy-safe food swaps and portion guidance.
+
+     Each card: 2-3 sentences, specific, no fluff.
+
+  C. WHY IT'S DIFFERENT
+     3-4 bullet points:
+       - "Based on IOM/ACOG guidelines, not blog advice"
+       - "Shows where guidelines disagree — and what that means for you"
+       - "Nutrition board maps micros to foods, not just numbers"
+       - "Built for first-time moms who want a system, not just information"
+
+  D. WHAT YOU'LL GET
+     A simple checklist (the PDF deliverable):
+       - Weight gain tracker by week and trimester
+       - BMI-based target ranges (IOM/ACOG)
+       - Daily nutrition targets (calories, protein, 6 key micros)
+       - Food lists: what to prioritize, what to limit
+       - 3 trimester meal frameworks with sample days
+       - Weekly check-in prompts
+       - "When to call your clinician" red flags
+
+  E. THE FORM (see section 4 for handler spec)
+     - Heading: "Get the free PDF"
+     - Sub: "Enter your email. We'll send the PDF instantly."
+     - Fields:
+         Email address (required, type=email)
+         Due date or week of pregnancy (optional, type=text or select)
+         [Checkbox] "I agree to receive emails from Bump Compass. I can
+                    unsubscribe at any time." (required, GDPR)
+       Button: "Send me the PDF"
+     - Below the form (small print):
+         "We use MailerLite to send your PDF. Your email is never sold
+          or shared. See our Privacy Policy."
+
+  F. SOCIAL PROOF (placeholder for now — remove if it feels empty)
+     "Join [X] pregnant women who are using this system to stay on track."
+     (Only add if we have a real number. Otherwise omit.)
+
+  G. FAQ (3-4 questions)
+     - "Is this medical advice?"
+     - "What if I'm outside the US?"
+     - "Can I share this with my partner or midwife?"
+     - "What format is the PDF?"
+
+  H. FINAL CTA
+     Repeat the form or a button that scrolls back to it.
+
+3.4 INTERNAL LINKS
+  - Link to /guides/pregnancy-weight-gain/ from the "learn more" or
+    "the full guide" section.
+  - Link to /privacy-policy/ and /affiliate-disclosure/ in the footer
+    area near the form.
+
+3.5 ADS
+  - One AdUnit (guides slot: 2263226824) after the "What's Inside" section.
+  - That's it. No other ads on this page. It's a conversion page.
+
+================================================================================
+4. FORM HANDLER: functions/subscribe.js
+================================================================================
+
+4.1 ENDPOINT
+  POST /functions/subscribe
+
+4.2 EXPECTED PAYLOAD (JSON)
+  {
+    "email": "user@example.com",
+    "due_date": "2026-03-15",       // optional
+    "consent": true                   // required, must be true
+  }
+
+4.3 VALIDATION (server-side, return 400 on failure)
+  - email: required, valid format (regex), max 254 chars
+  - consent: must be `true`
+  - due_date: optional, if present must be YYYY-MM-DD format
+
+4.4 MAILERLITE API CALL
+  POST https://connect.mailerlite.com/api/subscribers
+  Headers:
+    Authorization: Bearer <MAILERLITE_API_KEY>
+    Content-Type: application/json
+    Accept: application/json
+  Body:
+    {
+      "email": "<email>",
+      "groups": ["<GROUP_ID>"],
+      "fields": {
+        "due_date": "<due_date>"       // only if provided
+      },
+      "resubscribe": true
+    }
+
+  NOTE: Double opt-in is configured at the MailerLite group level
+  (Settings → Double opt-in). When enabled, MailerLite sends a
+  confirmation email automatically. We do NOT implement double
+  opt-in in code.
+
+4.5 RESPONSE
+  Success (200 or 201 from MailerLite):
+    { "ok": true, "message": "Check your inbox — the PDF is on its way." }
+
+  Error (400/500):
+    { "ok": false, "error": "<human-readable message>" }
+
+4.6 GROUP ID
+  We need a MailerLite group for lead magnet subscribers.
+  Suggested name: "Pregnancy Weight Gain System"
+  (Create it in the dashboard, note the ID, store in .env or pass
+  via Pages Function environment variable.)
+
+4.7 ENVIRONMENT VARIABLES (set in Cloudflare Pages dashboard)
+  - MAILERLITE_API_KEY (secret)
+  - MAILERLITE_GROUP_ID (plaintext)
+
+================================================================================
+5. CLIENT-SIDE FORM BEHAVIOR
+================================================================================
+
+The Astro form uses `fetch()` to POST to /functions/subscribe.
+
+  - On submit: disable button, show "Sending..."
+  - On 200: hide form, show success message + "Check your inbox" + a
+    secondary CTA to /guides/pregnancy-weight-gain/
+  - On error: show error message inline, re-enable button
+  - No page reload. No external JS libraries.
+
+  The form is progressively enhanced: without JS it does nothing
+  (Astro renders static HTML). This is fine — JS is required for
+  the site's calculators anyway.
+
+================================================================================
+6. WHAT WE STILL NEED TO BUILD AFTER THIS
+================================================================================
+
+  1. The actual PDF (the Pregnancy Weight Gain Control System)
+     - This is the deliverable the form promises.
+     - Content already exists in /home/bic/utility-sites/research/
+       (market research, compliance brief, product research).
+     - Needs to be designed and exported as a downloadable PDF.
+
+  2. MailerLite email automation
+     - When someone subscribes, send the PDF immediately.
+     - Can be done via MailerLite's "Automation" feature (trigger:
+       subscriber joins group → send email with PDF attachment).
+     - Or via Pages Function returning a download URL (less ideal).
+
+  3. The "newsletter later" decision
+     - This spec is the first step. Once the lead magnet converts,
+       we know email capture works. Then we decide on the recurring
+       newsletter (MailerLite vs Zoho — still open).
+
+================================================================================
+7. OPEN QUESTIONS FOR BIC
+================================================================================
+
+  A. Due date field: keep it optional on the form?
+     PRO: enables date-triggered email sequences later.
+     CON: extra friction on the form.
+     RECOMMENDATION: keep it optional, low friction.
+
+  B. GDPR consent checkbox: required (opt-in) or pre-checked (opt-out)?
+     RECOMMENDATION: required, unchecked by default. GDPR standard.
+
+  C. Should we also offer the PDF as a free download on the
+     /guides/pregnancy-weight-gain/ page (no email required)?
+     RECOMMENDATION: No. The guide is free content. The PDF is the
+     gated asset. Keep them separate.
+
+  D. PDF hosting: where will the PDF file live?
+     Options: Cloudflare R2, MailerLite attachment, or a public URL
+     on the site (e.g., /downloads/pregnancy-weight-gain-system.pdf).
+     RECOMMENDATION: Start with MailerLite attachment (simplest).
+     Migrate to R2 or a CDN later if download volume grows.
+
+================================================================================
+8. ACCEPTANCE CRITERIA
+================================================================================
+
+  [ ] Page builds and renders at /download/pregnancy-weight-gain-system/
+  [ ] Form submits to /functions/subscribe via fetch()
+  [ ] Invalid email returns 400 with clear error
+  [ ] Valid submission creates subscriber in MailerLite with correct group
+  [ ] Due date is stored in the custom field when provided
+  [ ] Double opt-in confirmation email is sent by MailerLite
+  [ ] Success message displays without page reload
+  [ ] API key is NOT in source code (verified: grep returns nothing)
+  [ ] One AdUnit renders (guides slot)
+  [ ] Page is indexed by Google (no noindex)
+  [ ] Internal links to /guides/privacy-policy/ and /affiliate-disclosure/
+
+================================================================================
+9. FILES TOUCHED
+================================================================================
+
+  CREATE:
+    src/pages/download/pregnancy-weight-gain-system.astro
+    functions/subscribe.js
+    wrangler.toml
+
+  MODIFY:
+    src/pages/download/  (new directory)
+
+  CONFIG:
+    Cloudflare Pages dashboard → Environment variables:
+      MAILERLITE_API_KEY (secret)
+      MAILERLITE_GROUP_ID (plaintext)
+
+  MAILERLITE DASHBOARD:
+    Create group: "Pregnancy Weight Gain System"
+    Enable double opt-in for that group
+    Create automation: "Subscriber joins group → Send PDF email"
