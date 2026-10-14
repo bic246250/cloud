@@ -232,7 +232,7 @@ const canonical = 'https://bumpcompass.com/download/pregnancy-weight-gain-system
     const consent = formData.get('consent') === 'on';
 
     try {
-      const resp = await fetch('/functions/subscribe', {
+      const resp = await fetch('/subscribe', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, due_date, consent }),
