@@ -1,0 +1,20 @@
+# Cloudflare Pages response headers.
+# Without this file every asset is served with a short shared lifetime
+# (production currently returns max-age=14400 for everything, including
+# content-hashed build output), so repeat visits revalidate the font, the
+# logo and the stylesheet on every page view.
+
+# Astro build output is content-hashed (_astro/Base.<hash>.css), so a new
+# build always produces a new URL. Safe to cache indefinitely.
+/_astro/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Self-hosted variable font. Path is stable, so a long-but-finite lifetime:
+# a replacement propagates within 30 days without needing a cache purge.
+/fonts/*
+  Cache-Control: public, max-age=2592000
+
+# Images are not hashed. Keep the lifetime short so swapping a logo does not
+# leave visitors on a stale asset.
+/images/*
+  Cache-Control: public, max-age=604800

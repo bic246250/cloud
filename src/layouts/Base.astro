@@ -61,9 +61,10 @@ const jsonLd = {
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 
-    <!-- AdSense -->
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4383269716621209" crossorigin="anonymous"></script>
+    <!-- Self-hosted font: preload the latin subset used above the fold -->
+    <link rel="preload" href="/fonts/nunito-sans-latin.woff2" as="font" type="font/woff2" crossorigin />
 
+    <!-- AdSense is loaded lazily, before </body>. See the loader at the end of the document. -->
     <!-- JSON-LD -->
     <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
   </head>
@@ -71,7 +72,15 @@ const jsonLd = {
     <header class="site-header">
       <div class="header-inner">
         <a href="/" class="logo">
-          <img src="/images/bumpcompass-logo.png" alt="Bump Compass logo" />
+          <img
+            src="/images/logo-icon-2x.webp"
+            srcset="/images/logo-icon-1x.webp 1x, /images/logo-icon-2x.webp 2x, /images/logo-icon-3x.webp 3x"
+            width="41"
+            height="44"
+            alt=""
+            aria-hidden="true"
+            decoding="async"
+          />
           <span class="logo-text">
             <span class="logo-name">bump<span class="teal">compass</span></span>
             <span class="logo-tagline">Real guidance. Every step.</span>
@@ -111,12 +120,21 @@ const jsonLd = {
       <div class="footer-inner">
         <div class="footer-grid">
           <div class="footer-brand">
-            <img src="/images/bumpcompass-logo.png" alt="Bump Compass logo" />
+            <img
+              src="/images/logo-icon-2x.webp"
+              srcset="/images/logo-icon-1x.webp 1x, /images/logo-icon-2x.webp 2x, /images/logo-icon-3x.webp 3x"
+              width="37"
+              height="40"
+              alt=""
+              aria-hidden="true"
+              loading="lazy"
+              decoding="async"
+            />
             <p class="footer-tagline">Real guidance. Every step.</p>
             <p class="footer-desc">Free pregnancy calculators and guides. Every clinical claim is sourced to ACOG, NICHD, Mayo Clinic, or NHS. We show the range where authorities disagree.</p>
           </div>
           <div class="footer-col">
-            <h4>Calculators</h4>
+            <p class="footer-col-title">Calculators</p>
             <ul>
               <li><a href="/gestational-age-calculator/">Gestational Age</a></li>
               <li><a href="/how-many-weeks-pregnant/">How Many Weeks Pregnant</a></li>
@@ -130,7 +148,7 @@ const jsonLd = {
             </ul>
           </div>
           <div class="footer-col">
-            <h4>Guides</h4>
+            <p class="footer-col-title">Guides</p>
             <ul>
               <li><a href="/guides/first-trimester/">First Trimester</a></li>
               <li><a href="/guides/second-trimester/">Second Trimester</a></li>
@@ -145,7 +163,7 @@ const jsonLd = {
             </ul>
           </div>
           <div class="footer-col">
-            <h4>Site</h4>
+            <p class="footer-col-title">Site</p>
             <ul>
               <li><a href="/about/">About</a></li>
               <li><a href="/faq/">FAQ</a></li>
@@ -162,5 +180,73 @@ const jsonLd = {
         </div>
       </div>
     </footer>
+    <!-- AdSense loader (deferred).
+         The adsbygoogle.js script used to sit in <head> with `async`, which
+         still cost every visitor ~450 KB of JavaScript plus ~1 MB of
+         Google-injected webfonts before first paint. Every ad slot on this
+         site is a single unit placed below the fold, so per Google's own
+         guidance (web.dev/articles/loading-ads-page-speed) it can be lazy
+         loaded: the library is fetched when the slot nears the viewport, on
+         first interaction, or on idle after load - whichever comes first.
+         That keeps the impression for anyone who scrolls, while nothing about
+         ads blocks render. To make it stricter, delete the idle fallback. -->
+    <script is:inline>
+      (function () {
+        var CLIENT = 'ca-pub-4383269716621209';
+        var SRC = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=' + CLIENT;
+        var state = 'idle'; // idle -> loading -> ready
+
+        function pushUnits() {
+          var units = document.querySelectorAll('ins.adsbygoogle:not([data-adsbygoogle-status])');
+          for (var i = 0; i < units.length; i++) {
+            (window.adsbygoogle = window.adsbygoogle || []).push({});
+          }
+        }
+
+        function loadAds() {
+          if (state !== 'idle') return;
+          state = 'loading';
+          var s = document.createElement('script');
+          s.async = true;
+          s.crossOrigin = 'anonymous';
+          s.src = SRC;
+          s.onload = function () { state = 'ready'; pushUnits(); };
+          s.onerror = function () { state = 'idle'; };
+          document.head.appendChild(s);
+        }
+
+        // If the library is already present (cached, or a bfcache restore),
+        // just flush the slots.
+        if (window.adsbygoogle) { state = 'ready'; pushUnits(); return; }
+
+        // 1. slot approaching the viewport
+        if ('IntersectionObserver' in window) {
+          var io = new IntersectionObserver(function (entries) {
+            for (var i = 0; i < entries.length; i++) {
+              if (entries[i].isIntersecting) { loadAds(); io.disconnect(); return; }
+            }
+          }, { rootMargin: '600px 0px' });
+          var units = document.querySelectorAll('.ad-unit');
+          for (var i = 0; i < units.length; i++) io.observe(units[i]);
+          if (!units.length) loadAds();
+        } else {
+          loadAds();
+        }
+
+        // 2. first interaction
+        ['scroll', 'mousemove', 'touchstart', 'keydown', 'click'].forEach(function (ev) {
+          window.addEventListener(ev, loadAds, { once: true, passive: true });
+        });
+
+        // 3. idle fallback so a reader who never scrolls still counts
+        function idle() {
+          (window.requestIdleCallback || function (cb) { setTimeout(cb, 1); })(function () {
+            setTimeout(loadAds, 3000);
+          });
+        }
+        if (document.readyState === 'complete') idle();
+        else window.addEventListener('load', idle, { once: true });
+      })();
+    </script>
   </body>
 </html>
