@@ -598,7 +598,8 @@ p {
   color: var(--navy);
 }
 
-.card h3 {
+.card h3,
+.card h2 {
   font-size: 1.15rem;
   color: var(--navy);
   margin-bottom: 0.5rem;
