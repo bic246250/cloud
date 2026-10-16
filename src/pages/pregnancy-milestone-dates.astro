@@ -17,6 +17,7 @@ const description = 'Dated list of key pregnancy milestones — scans, quickenin
 
     <div class="card" id="calculator">
       <h2 class="mt-0">Calculate Your Milestones</h2>
+      <form toolname="pregnancy_milestone_dates" tooldescription="List key pregnancy milestone dates such as scans, quickening, viability, and term. Inputs: lmp (first day of last menstrual period, YYYY-MM-DD), cycle (average cycle length in days, default 28)." id="calc-form">
 
       <div style="margin-bottom: 1rem;">
         <label for="lmp" style="display: block; font-weight: 600; margin-bottom: 0.25rem;">Last menstrual period (LMP)</label>
@@ -28,7 +29,8 @@ const description = 'Dated list of key pregnancy milestones — scans, quickenin
         <input type="number" id="cycle" name="cycle" value="28" min="21" max="45" style="width: 100%; padding: 0.5rem; border: 1px solid var(--color-border); border-radius: 4px; font-size: 1rem;" />
       </div>
 
-      <button id="calc-btn">Calculate</button>
+      <button type="submit" id="calc-btn">Calculate</button>
+      </form>
 
       <div id="result" style="display: none; margin-top: 1.5rem; padding: 1rem; background: var(--color-card-bg); border: 1px solid var(--color-card-border); border-radius: 8px;">
         <h3 class="mt-0">Your Milestone Dates</h3>
@@ -135,11 +137,12 @@ const description = 'Dated list of key pregnancy milestones — scans, quickenin
 
     const lmpInput = document.getElementById('lmp') as HTMLInputElement;
     const cycleInput = document.getElementById('cycle') as HTMLInputElement;
-    const calcBtn = document.getElementById('calc-btn') as HTMLButtonElement;
+    const form = document.getElementById('calc-form') as HTMLFormElement;
     const resultDiv = document.getElementById('result') as HTMLDivElement;
     const resultContent = document.getElementById('result-content') as HTMLDivElement;
 
-    calcBtn.addEventListener('click', () => {
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
       const lmpVal = lmpInput.value;
       if (!lmpVal) {
         alert('Please enter your last menstrual period.');

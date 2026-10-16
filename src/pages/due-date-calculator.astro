@@ -17,6 +17,7 @@ const description = 'Calculate your due date from LMP, conception date, IVF tran
 
     <div class="card" id="calculator">
       <h2 class="mt-0">Calculate Your Due Date</h2>
+      <form toolname="due_date_calculator" tooldescription="Calculate the due date by four methods. Inputs: method (lmp, conception, ivf3, ivf5, or ultrasound) plus the matching date field (lmp, conception, ivf-date, or us-date); ultrasound also takes us-weeks and us-days. cycle (average cycle length in days, default 28)." id="calc-form">
 
       <div style="margin-bottom: 1rem;">
         <label for="method" style="display: block; font-weight: 600; margin-bottom: 0.25rem;">Calculation method</label>
@@ -58,7 +59,8 @@ const description = 'Calculate your due date from LMP, conception date, IVF tran
         <input type="number" id="cycle" name="cycle" value="28" min="21" max="45" style="width: 100%; padding: 0.5rem; border: 1px solid var(--color-border); border-radius: 4px; font-size: 1rem;" />
       </div>
 
-      <button id="calc-btn">Calculate</button>
+      <button type="submit" id="calc-btn">Calculate</button>
+      </form>
 
       <div id="result" style="display: none; margin-top: 1.5rem; padding: 1rem; background: var(--color-card-bg); border: 1px solid var(--color-card-border); border-radius: 8px;">
         <h3 class="mt-0">Your Result</h3>
@@ -172,7 +174,7 @@ const description = 'Calculate your due date from LMP, conception date, IVF tran
     const usWeeksInput = document.getElementById('us-weeks') as HTMLInputElement;
     const usDaysInput = document.getElementById('us-days') as HTMLInputElement;
     const cycleInput = document.getElementById('cycle') as HTMLInputElement;
-    const calcBtn = document.getElementById('calc-btn') as HTMLButtonElement;
+    const form = document.getElementById('calc-form') as HTMLFormElement;
     const resultDiv = document.getElementById('result') as HTMLDivElement;
     const resultContent = document.getElementById('result-content') as HTMLDivElement;
 
@@ -191,7 +193,8 @@ const description = 'Calculate your due date from LMP, conception date, IVF tran
       }
     });
 
-    calcBtn.addEventListener('click', () => {
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
       const method = methodSelect.value;
       let dueDate: Date | null = null;
       let methodLabel = '';

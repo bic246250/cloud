@@ -18,6 +18,7 @@ const description = 'Calculate your ovulation date and fertile window from your 
 
         <div class="card" id="calculator">
           <h2 class="mt-0">Calculate Your Ovulation</h2>
+      <form toolname="ovulation_calculator" tooldescription="Estimate the ovulation date and fertile window. Inputs: lmp (first day of last menstrual period, YYYY-MM-DD), cycle (average cycle length in days, default 28)." id="calc-form">
 
           <div style="margin-bottom: 1rem;">
             <label for="lmp" style="display: block; font-weight: 600; margin-bottom: 0.25rem;">Last menstrual period (LMP)</label>
@@ -30,7 +31,8 @@ const description = 'Calculate your ovulation date and fertile window from your 
             <p class="text-muted text-small mt-0 mb-0">Default is 28 days. If your cycle is longer or shorter, adjust this for a more accurate estimate.</p>
           </div>
 
-          <button id="calc-btn">Calculate</button>
+          <button type="submit" id="calc-btn">Calculate</button>
+      </form>
 
           <div id="result" style="display: none; margin-top: 1.5rem; padding: 1rem; background: var(--mint); border: 1px solid var(--teal); border-radius: 8px;">
             <h3 class="mt-0">Your Results</h3>
@@ -121,11 +123,12 @@ const description = 'Calculate your ovulation date and fertile window from your 
 
   const lmpInput = document.getElementById('lmp') as HTMLInputElement;
   const cycleInput = document.getElementById('cycle') as HTMLInputElement;
-  const calcBtn = document.getElementById('calc-btn') as HTMLButtonElement;
+  const form = document.getElementById('calc-form') as HTMLFormElement;
   const resultDiv = document.getElementById('result') as HTMLDivElement;
   const resultContent = document.getElementById('result-content') as HTMLDivElement;
 
-  calcBtn.addEventListener('click', () => {
+  form.addEventListener('submit', (e) => {
+      e.preventDefault();
     const lmpVal = lmpInput.value;
     if (!lmpVal) {
       alert('Please enter your last menstrual period.');
