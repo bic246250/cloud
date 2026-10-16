@@ -180,16 +180,17 @@ const jsonLd = {
         </div>
       </div>
     </footer>
-    <!-- AdSense loader (deferred).
+    <!-- AdSense loader (lazy).
          The adsbygoogle.js script used to sit in <head> with `async`, which
-         still cost every visitor ~450 KB of JavaScript plus ~1 MB of
-         Google-injected webfonts before first paint. Every ad slot on this
-         site is a single unit placed below the fold, so per Google's own
-         guidance (web.dev/articles/loading-ads-page-speed) it can be lazy
-         loaded: the library is fetched when the slot nears the viewport, on
-         first interaction, or on idle after load - whichever comes first.
-         That keeps the impression for anyone who scrolls, while nothing about
-         ads blocks render. To make it stricter, delete the idle fallback. -->
+         cost every visitor ~450 KB of JavaScript plus ~1 MB of Google-
+         injected webfonts. The stack it pulls in (ads + Funding Choices CMP +
+         ad webfonts) totals ~1.4 MB, so loading it unconditionally undid most
+         of the page-weight work. Every ad slot on this site is a single unit
+         below the fold, so per Google's own guidance
+         (web.dev/articles/loading-ads-page-speed) the library is fetched only
+         when a slot nears the viewport. No idle or first-interaction fallback:
+         a visitor who never scrolls should not pay ~1.4 MB for an ad they
+         cannot see, and unviewable impressions are worth nothing anyway. -->
     <script is:inline>
       (function () {
         var CLIENT = 'ca-pub-4383269716621209';
@@ -219,7 +220,8 @@ const jsonLd = {
         // just flush the slots.
         if (window.adsbygoogle) { state = 'ready'; pushUnits(); return; }
 
-        // 1. slot approaching the viewport
+        // Load when a slot nears the viewport. IO is supported everywhere
+        // that matters; without it, load immediately rather than never.
         if ('IntersectionObserver' in window) {
           var io = new IntersectionObserver(function (entries) {
             for (var i = 0; i < entries.length; i++) {
@@ -232,20 +234,6 @@ const jsonLd = {
         } else {
           loadAds();
         }
-
-        // 2. first interaction
-        ['scroll', 'mousemove', 'touchstart', 'keydown', 'click'].forEach(function (ev) {
-          window.addEventListener(ev, loadAds, { once: true, passive: true });
-        });
-
-        // 3. idle fallback so a reader who never scrolls still counts
-        function idle() {
-          (window.requestIdleCallback || function (cb) { setTimeout(cb, 1); })(function () {
-            setTimeout(loadAds, 3000);
-          });
-        }
-        if (document.readyState === 'complete') idle();
-        else window.addEventListener('load', idle, { once: true });
       })();
     </script>
   </body>
