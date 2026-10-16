@@ -220,6 +220,13 @@ const jsonLd = {
         // just flush the slots.
         if (window.adsbygoogle) { state = 'ready'; pushUnits(); return; }
 
+        // No ad on this page -> do nothing. (An earlier `if (!units.length)
+        // loadAds()` fallback pulled the whole ~1.4 MB ad+CMP stack onto
+        // unit-less pages like /get-pdf/ and /guides/, and the Funding
+        // Choices banner became their LCP.)
+        var units = document.querySelectorAll('.ad-unit');
+        if (!units.length) return;
+
         // Load when a slot nears the viewport. IO is supported everywhere
         // that matters; without it, load immediately rather than never.
         if ('IntersectionObserver' in window) {
@@ -228,9 +235,7 @@ const jsonLd = {
               if (entries[i].isIntersecting) { loadAds(); io.disconnect(); return; }
             }
           }, { rootMargin: '100px 0px' });
-          var units = document.querySelectorAll('.ad-unit');
           for (var i = 0; i < units.length; i++) io.observe(units[i]);
-          if (!units.length) loadAds();
         } else {
           loadAds();
         }
