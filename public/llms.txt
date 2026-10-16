@@ -1,0 +1,53 @@
+# Bump Compass
+
+> Free pregnancy calculators and week-by-week guides. Every clinical claim is sourced to ACOG, NICHD, Mayo Clinic, or NHS; where authorities disagree, the range is shown. All tools run in the browser and nothing is stored. Not medical advice.
+
+Bump Compass is a content and tools site for pregnancy, with two content types:
+
+- **Calculators** — interactive tools that compute dates and milestones from user input, entirely client-side. There is no calculators API.
+- **Guides** — long-form, sourced articles explaining pregnancy topics.
+
+Key facts for agents:
+
+- Calculators are pure client-side JavaScript. Inputs never leave the browser and nothing is persisted.
+- The only backend endpoint is the email signup behind the free PDF download (a Cloudflare Function).
+- Content is evidence-based: clinical claims are cited inline, and ranges are shown where authorities disagree.
+- Pages are server-rendered (Astro) with semantic HTML and a well-formed accessibility tree.
+
+## Calculators
+
+- [Gestational Age Calculator](https://bumpcompass.com/gestational-age-calculator/): Weeks and days pregnant from LMP, due date, or ultrasound.
+- [How Many Weeks Pregnant](https://bumpcompass.com/how-many-weeks-pregnant/): Gestational age in conversational form.
+- [Trimester Calculator](https://bumpcompass.com/trimester-calculator/): Which trimester, by ACOG boundaries.
+- [Conception Date Calculator](https://bumpcompass.com/conception-date-calculator/): Estimated conception and fertile window.
+- [Pregnancy Milestone Dates](https://bumpcompass.com/pregnancy-milestone-dates/): Dated list of key milestones.
+- [Due Date Calculator](https://bumpcompass.com/due-date-calculator/): EDD from LMP, conception, IVF transfer, or ultrasound.
+- [Ovulation Calculator](https://bumpcompass.com/ovulation-calculator/): Ovulation date and fertile window from cycle length.
+- [Pregnancy Test Tracker](https://bumpcompass.com/pregnancy-test-tracker/): hCG levels and what results mean.
+- [Kick Counter](https://bumpcompass.com/kick-counter/): Track fetal movements from week 28 onward.
+
+## Guides
+
+- [First Trimester](https://bumpcompass.com/guides/first-trimester/): Weeks 1-13, symptoms, development, screening.
+- [Second Trimester](https://bumpcompass.com/guides/second-trimester/): Weeks 14-27, movement, anatomy scan.
+- [Third Trimester](https://bumpcompass.com/guides/third-trimester/): Weeks 28-40, monitoring, birth preparation.
+- [Prenatal Vitamins](https://bumpcompass.com/guides/prenatal-vitamins/): Key nutrients and how to choose a prenatal vitamin.
+- [Pregnancy Weight Gain](https://bumpcompass.com/guides/pregnancy-weight-gain/): Weight gain guidelines by pre-pregnancy BMI.
+- [Fetal Development](https://bumpcompass.com/guides/fetal-development/): Week-by-week development from embryo to term.
+- [Pregnancy Week by Week](https://bumpcompass.com/guides/pregnancy-week-by-week/): Body and baby changes each week.
+- [Gestational Age Explained](https://bumpcompass.com/guides/gestational-age-explained/): Why dating counts from the last period.
+- [Due Date Explained](https://bumpcompass.com/guides/due-date-explained/): How due dates are calculated and their accuracy.
+- [Pregnancy Test Timing](https://bumpcompass.com/guides/pregnancy-test-timing/): When to test for the most accurate result.
+
+## Site
+
+- [About](https://bumpcompass.com/about/): Mission and sourcing standard.
+- [FAQ](https://bumpcompass.com/faq/): Tools, privacy, and medical disclaimers.
+- [Medical Disclaimer](https://bumpcompass.com/disclaimer/): What this site is and is not.
+- [Privacy Policy](https://bumpcompass.com/privacy/): Data practices.
+- [Affiliate Disclosure](https://bumpcompass.com/affiliate-disclosure/): How the site earns revenue.
+- [Terms](https://bumpcompass.com/terms/): Terms of use.
+
+## Optional
+
+- [Contact](https://bumpcompass.com/contact/): Get in touch with the editorial team.
