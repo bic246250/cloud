@@ -9,7 +9,11 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "check:guides": "node scripts/check-guides.mjs",
+    "lint:guides": "node scripts/lint-guides.mjs",
+    "check:sources": "node scripts/check-sources.mjs",
+    "verify": "npm run check:guides && npm run lint:guides && npm run check:sources"
   },
   "dependencies": {
     "astro": "^7.3.8"
