@@ -4,114 +4,194 @@ import AdUnit from '../components/AdUnit.astro';
 import Icon from '../components/Icon.astro';
 
 const title = 'FAQ';
-const description = 'Frequently asked questions about Bump Compass — our tools, privacy policy, medical disclaimers, affiliate disclosure, and how the site works.';
+const description = 'Frequently asked questions about Bump Compass — our tools, privacy policy, medical disclaimers, and how the site works.';
+
+// Single source of truth: rendered as HTML below and reused to build the
+// FAQPage schema, so the two can never drift apart.
+const sections = [
+  {
+    heading: 'About Bump Compass',
+    items: [
+      {
+        q: 'What is Bump Compass?',
+        a: 'Bump Compass is a free pregnancy and early parenthood resource. We provide interactive calculators and expert-reviewed guides to help you navigate pregnancy with confidence. Every clinical claim is sourced to ACOG, NICHD, Mayo Clinic, or NHS.',
+      },
+      {
+        q: 'Is Bump Compass a medical provider?',
+        a: 'No. We are not a clinic, hospital, or medical practice. Our tools perform arithmetic based on standard formulas and published clinical guidelines. They do not provide medical advice, diagnosis, or treatment. Always consult your own healthcare provider.',
+      },
+      {
+        q: 'Who is behind Bump Compass?',
+        a: 'Bump Compass is published by Bump Compass Editorial, a small editorial team. We are not a large corporation — we are a focused project built to provide trustworthy, sourced pregnancy information.',
+      },
+    ],
+  },
+  {
+    heading: 'Our Tools',
+    items: [
+      {
+        q: 'Are the calculators free?',
+        a: 'Yes. All tools on Bump Compass are completely free. There is no paywall, no subscription, and no account required.',
+      },
+      {
+        q: 'Do I need to create an account?',
+        a: 'No. Every tool runs entirely in your browser. You do not need to sign up or log in to use any of them. The only thing we ever ask for is an email address, and only when you request a free download.',
+      },
+      {
+        q: 'How accurate are the calculators?',
+        a: 'Our calculators use standard formulas recommended by ACOG. They are most accurate if you have regular cycles and know the date of your last period. A first-trimester ultrasound is more accurate than LMP-based dating. If the two differ by more than 7 days, ACOG recommends using the ultrasound date.',
+      },
+      {
+        q: 'Why do you ask for my cycle length?',
+        a: 'The standard pregnancy calculation assumes a 28-day cycle. If your cycle is longer or shorter, ovulation likely occurred later or earlier, and your due date should be adjusted. Many calculators ignore this adjustment — we include it because it is the most common source of error in pregnancy dating.',
+      },
+      {
+        q: 'Can I use the tools if I have irregular cycles?',
+        a: 'The tools will still provide an estimate, but it will be less reliable if your cycles vary significantly. If your cycles are irregular, we recommend discussing dating with your healthcare provider, who may use ultrasound for more accurate dating.',
+      },
+      {
+        q: 'Do you store my dates or personal information?',
+        a: 'Not from the calculators. All calculations happen in your browser, and your dates, cycle lengths, and other inputs are never transmitted to our servers or stored anywhere. The one exception is the free PDF download form, where you give us an email address — and optionally a due date — so we can send you what you asked for. See our Privacy Policy for exactly what we do with it.',
+      },
+    ],
+  },
+  {
+    heading: 'Privacy & Data',
+    items: [
+      {
+        q: 'Do you use cookies?',
+        a: 'We do not set any first-party cookies. Google AdSense may use cookies to serve personalised ads and measure ad performance. If you are in the EEA, the UK or Switzerland, we ask for your consent before advertising cookies are used, and you can change your choice at any time. You can also control cookies through your browser settings.',
+      },
+      {
+        q: 'Do you use analytics?',
+        a: 'No. We do not use analytics tools. We do not track visitors, build profiles, or collect usage data.',
+      },
+      {
+        q: 'Do you sell my data?',
+        a: 'No — never. We collect an email address when you ask us for a free PDF, and nothing else. We do not sell, rent or share it with anyone for their own marketing, and we never use your pregnancy information to target advertising at you.',
+      },
+      {
+        q: 'What do you do with my email address?',
+        a: 'We use it to send you the PDF you asked for and to confirm your subscription. You are only added to our mailing list after you click the confirmation link. Every email has a one-click unsubscribe, and you can ask us to delete your data entirely at any time.',
+      },
+      {
+        q: 'What about GDPR?',
+        a: 'If you are in the European Economic Area (EEA), the UK or Switzerland, you have the right to access, correct, delete or restrict our use of any personal information we hold about you, to object to our processing, to receive a portable copy of what you gave us, and to withdraw consent at any time. You also have the right to complain to your national data protection authority. See our Privacy Policy for the full detail, including your rights if you are in the United States.',
+      },
+    ],
+  },
+  {
+    heading: 'Medical Disclaimer',
+    items: [
+      {
+        q: 'Can I use Bump Compass instead of seeing a doctor?',
+        a: 'No. Our tools and guides are for informational and educational purposes only. They do not replace professional medical advice, diagnosis, or treatment. Always consult your own healthcare provider with questions about your pregnancy, your baby, or your health.',
+      },
+      {
+        q: 'What if the authorities disagree?',
+        a: 'Where authorities disagree — on storage times, viability definitions, trimester boundaries, or other clinical questions — we show the range and name each source. We do not silently pick one. This is more useful than a confident number that may be wrong for your situation.',
+      },
+      {
+        q: 'When should I call my clinician?',
+        a: 'Contact your healthcare provider if you experience heavy bleeding, severe pain, fever, severe vomiting, sudden swelling, decreased fetal movement, or any other concerns. If you are experiencing a medical emergency, call 911 (US) or 999 (UK) immediately.',
+      },
+    ],
+  },
+  {
+    heading: 'Technical Questions',
+    items: [
+      {
+        q: 'Why does the site look different on my phone?',
+        a: 'Bump Compass is designed to be fully responsive. The layout adapts to your screen size — on mobile devices, the navigation collapses into a hamburger menu, cards stack vertically, and tables scroll horizontally.',
+      },
+      {
+        q: 'Can I use the tools offline?',
+        a: 'No. The tools require an internet connection to load the page. Once loaded, the calculations happen in your browser and do not require a server connection.',
+      },
+      {
+        q: 'What browser do you recommend?',
+        a: 'Bump Compass works in all modern browsers — Chrome, Firefox, Safari, and Edge. For the best experience, use the latest version of your browser.',
+      },
+    ],
+  },
+  {
+    heading: 'Contact',
+    items: [
+      {
+        q: 'How do I report an error?',
+        a: 'If you find an error — a tool giving a wrong result, a broken calculation, a page that does not load — please contact us. Include the page URL, what you expected to see, and what you actually saw.',
+      },
+      {
+        q: 'How do I suggest a new tool or guide?',
+        a: 'We welcome suggestions. Contact us with your idea — if it fits our mission and audience, we will build it.',
+      },
+      {
+        q: 'Can I contribute content?',
+        a: 'We are not currently accepting guest contributions. If you are a clinician or writer interested in collaborating, please contact us with your credentials and proposal.',
+      },
+    ],
+  },
+];
+
+const faqJsonLd = {
+  '@type': 'FAQPage',
+  '@id': 'https://bumpcompass.com/faq/#faq',
+  mainEntity: sections.flatMap((section) =>
+    section.items.map((item) => ({
+      '@type': 'Question',
+      name: item.q,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: item.a,
+      },
+    }))
+  ),
+};
 ---
 
-<Base title={title} description={description}>
+<Base
+  title={title}
+  description={description}
+  jsonLd={[faqJsonLd]}
+  breadcrumbs={[{ name: 'Home', url: '/' }, { name: 'FAQ', url: '/faq/' }]}
+>
   <section class="section section-white">
     <div class="section-inner">
       <div class="prose">
         <h1>Frequently Asked Questions</h1>
 
-        <h2>About Bump Compass</h2>
+        {sections.slice(0, 3).map((section) => (
+          <>
+            <h2>{section.heading}</h2>
+            {section.items.map((item) => (
+              <>
+                <h3>{item.q}</h3>
+                <p>{item.a}</p>
+              </>
+            ))}
+          </>
+        ))}
 
-        <h3>What is Bump Compass?</h3>
-        <p>Bump Compass is a free pregnancy and early parenthood resource. We provide interactive calculators and expert-reviewed guides to help you navigate pregnancy with confidence. Every clinical claim is sourced to ACOG, NICHD, Mayo Clinic, or NHS.</p>
+        <!-- Ad sits at the natural mid-page break, after "Privacy & Data". -->
+        <AdUnit slot="5124184721" format="horizontal" />
 
-        <h3>Is Bump Compass a medical provider?</h3>
-        <p>No. We are not a clinic, hospital, or medical practice. Our tools perform arithmetic based on standard formulas and published clinical guidelines. They do not provide medical advice, diagnosis, or treatment. Always consult your own healthcare provider.</p>
+        {sections.slice(3).map((section) => (
+          <>
+            <h2>{section.heading}</h2>
+            {section.items.map((item) => (
+              <>
+                <h3>{item.q}</h3>
+                <p>{item.a}</p>
+              </>
+            ))}
+          </>
+        ))}
 
-        <h3>Who is behind Bump Compass?</h3>
-        <p>Bump Compass is published by Bump Compass Editorial, a small editorial team. We are not a large corporation — we are a focused project built to provide trustworthy, sourced pregnancy information.</p>
-
-        <h2>Our Tools</h2>
-
-        <h3>Are the calculators free?</h3>
-        <p>Yes. All tools on Bump Compass are completely free. There is no paywall, no subscription, and no account required.</p>
-
-        <h3>Do I need to create an account?</h3>
-        <p>No. Every tool runs entirely in your browser. You do not need to sign up or log in to use any of them. The only thing we ever ask for is an email address, and only when you request a free download.</p>
-
-        <h3>How accurate are the calculators?</h3>
-        <p>Our calculators use standard formulas recommended by ACOG. They are most accurate if you have regular cycles and know the date of your last period. A first-trimester ultrasound is more accurate than LMP-based dating. If the two differ by more than 7 days, ACOG recommends using the ultrasound date.</p>
-
-        <h3>Why do you ask for my cycle length?</h3>
-        <p>The standard pregnancy calculation assumes a 28-day cycle. If your cycle is longer or shorter, ovulation likely occurred later or earlier, and your due date should be adjusted. Many calculators ignore this adjustment — we include it because it is the most common source of error in pregnancy dating.</p>
-
-        <h3>Can I use the tools if I have irregular cycles?</h3>
-        <p>The tools will still provide an estimate, but it will be less reliable if your cycles vary significantly. If your cycles are irregular, we recommend discussing dating with your healthcare provider, who may use ultrasound for more accurate dating.</p>
-
-        <h3>Do you store my dates or personal information?</h3>
-        <p>Not from the calculators. All calculations happen in your browser, and your dates, cycle lengths, and other inputs are never transmitted to our servers or stored anywhere.</p>
-        <p>The one exception is the free PDF download form, where you give us an email address — and optionally a due date — so we can send you what you asked for. See <a href="/privacy/">our Privacy Policy</a> for exactly what we do with it.</p>
-
-        <h2>Privacy & Data</h2>
-
-        <h3>Do you use cookies?</h3>
-        <p>We do not set any first-party cookies. Google AdSense may use cookies to serve personalised ads and measure ad performance. If you are in the EEA, the UK or Switzerland, we ask for your consent before advertising cookies are used, and you can change your choice at any time. You can also control cookies through your browser settings.</p>
-
-        <h3>Do you use analytics?</h3>
-        <p>No. We do not use analytics tools. We do not track visitors, build profiles, or collect usage data.</p>
-
-        <h3>Do you sell my data?</h3>
-        <p>No — never. We collect an email address when you ask us for a free PDF, and nothing else. We do not sell, rent or share it with anyone for their own marketing, and we never use your pregnancy information to target advertising at you.</p>
-
-        <h3>What do you do with my email address?</h3>
-        <p>We use it to send you the PDF you asked for and to confirm your subscription. You are only added to our mailing list after you click the confirmation link. Every email has a one-click unsubscribe, and you can ask us to delete your data entirely at any time.</p>
-
-        <h3>What about GDPR?</h3>
-        <p>If you are in the European Economic Area (EEA), the UK or Switzerland, you have the right to access, correct, delete or restrict our use of any personal information we hold about you, to object to our processing, to receive a portable copy of what you gave us, and to withdraw consent at any time. You also have the right to complain to your national data protection authority. See our <a href="/privacy/">Privacy Policy</a> for the full detail, including your rights if you are in the United States.</p>
-
-        <h2>Medical Disclaimer</h2>
-
-        <h3>Can I use Bump Compass instead of seeing a doctor?</h3>
-        <p>No. Our tools and guides are for informational and educational purposes only. They do not replace professional medical advice, diagnosis, or treatment. Always consult your own healthcare provider with questions about your pregnancy, your baby, or your health.</p>
-
-        <h3>What if the authorities disagree?</h3>
-        <p>Where authorities disagree — on storage times, viability definitions, trimester boundaries, or other clinical questions — we show the range and name each source. We do not silently pick one. This is more useful than a confident number that may be wrong for your situation.</p>
-
-        <h3>When should I call my clinician?</h3>
-        <p>Contact your healthcare provider if you experience heavy bleeding, severe pain, fever, severe vomiting, sudden swelling, decreased fetal movement, or any other concerns. If you are experiencing a medical emergency, call 911 (US) or 999 (UK) immediately.</p>
-
-        <h2>Affiliate Disclosure</h2>
-
-        <h3>Do you use affiliate links?</h3>
-        <p>Yes. Some links on our guides are affiliate links. If you click an affiliate link and make a purchase, we may earn a commission at no additional cost to you. See our <a href="/affiliate-disclosure/">Affiliate Disclosure</a> for details.</p>
-
-        <h3>Does this affect your recommendations?</h3>
-        <p>No. We only recommend products that are relevant to the guide's subject. We do not recommend products solely because they pay a commission. We do not accept payment for positive reviews.</p>
-
-        <h3>Do I pay more if I use your links?</h3>
-        <p>No. The price you pay is the same whether you use our link or go directly to the retailer.</p>
-
-        <h2>Technical Questions</h2>
-
-        <h3>Why does the site look different on my phone?</h3>
-        <p>Bump Compass is designed to be fully responsive. The layout adapts to your screen size — on mobile devices, the navigation collapses into a hamburger menu, cards stack vertically, and tables scroll horizontally.</p>
-
-        <h3>Can I use the tools offline?</h3>
-        <p>No. The tools require an internet connection to load the page. Once loaded, the calculations happen in your browser and do not require a server connection.</p>
-
-        <h3>What browser do you recommend?</h3>
-        <p>Bump Compass works in all modern browsers — Chrome, Firefox, Safari, and Edge. For the best experience, use the latest version of your browser.</p>
-
-        <h2>Contact</h2>
-
-        <h3>How do I report an error?</h3>
-        <p>If you find an error — a tool giving a wrong result, a broken calculation, a page that does not load — please <a href="/contact/">contact us</a>. Include the page URL, what you expected to see, and what you actually saw.</p>
-
-        <h3>How do I suggest a new tool or guide?</h3>
-        <p>We welcome suggestions. <a href="/contact/">Contact us</a> with your idea — if it fits our mission and audience, we will build it.</p>
-
-        <h3>Can I contribute content?</h3>
-        <p>We are not currently accepting guest contributions. If you are a clinician or writer interested in collaborating, please <a href="/contact/">contact us</a> with your credentials and proposal.</p>
-
-        <div class="affiliate-disclosure">
+        <div class="disclosure-box">
           <strong>Not medical advice:</strong> This FAQ is for informational purposes only. It does not replace professional medical advice, diagnosis, or treatment. Always consult your own clinician.
         </div>
       </div>
     </div>
-      <AdUnit slot="5124184721" format="horizontal" />
 </section>
 
 </Base>

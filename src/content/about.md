@@ -24,7 +24,7 @@ Where these authorities disagree — and they do, on storage times, on viability
 
 - **Not medical advice.** The tools do arithmetic. The guides explain published guidance. Neither replaces a conversation with your own clinician.
 - **Not a substitute for prenatal care.** If you have a question about your pregnancy, your baby, or your health, talk to your doctor, midwife, or nurse.
-- **Not a product recommendation service.** When we mention a product, it is because it is the subject of the guide — not because we are paid to say so. Affiliate relationships are disclosed on every page that contains them.
+- **Not a product recommendation service.** When we mention a product, it is because it is the subject of the guide — not because we are paid to say so.
 
 ## Our standard
 

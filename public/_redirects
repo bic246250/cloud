@@ -1,0 +1,7 @@
+# Cloudflare Pages redirects.
+#
+# /affiliate-disclosure/ was removed from the site, but Cloudflare's Pages
+# layer still serves a cached copy of it on the custom domain (bumpcompass.com)
+# even though every deployment and the zone cache have been purged. This rule
+# forces the path to resolve instead of serving the stale copy.
+/affiliate-disclosure/ / 301

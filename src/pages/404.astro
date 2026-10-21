@@ -1,0 +1,55 @@
+---
+import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+
+const title = 'Page Not Found';
+const description = 'The page you were looking for does not exist. Try one of our pregnancy calculators or guides.';
+const canonical = 'https://bumpcompass.com/404/';
+---
+
+<Base title={title} description={description} canonical={canonical} noindex={true}>
+  <section class="section section-mint">
+    <div class="section-inner" style="text-align: center; max-width: 640px; margin: 0 auto;">
+      <h1 style="color: var(--navy); font-size: 2.5rem; margin-bottom: 0.5rem;">        Page not found
+      </h1>
+      <p style="color: var(--text-light); font-size: 1.15rem; margin-bottom: 2rem;">
+        The page you were looking for doesn't exist. It may have been moved, renamed, or the link may be broken.
+      </p>
+
+      <a href="/" class="btn btn-primary" style="display: inline-block; text-decoration: none; font-size: 1.05rem;">
+        Back to home
+      </a>
+    </div>
+  </section>
+
+  <section class="section section-white">
+    <div class="section-inner">
+      <div class="section-header">
+        <h2>Try a calculator</h2>
+        <p>Our most-used tools, ready to go.</p>
+      </div>
+      <div class="card-grid">
+        <a href="/due-date-calculator/" class="card">
+          <div class="card-icon card-icon-navy"><Icon name="due-date" /></div>
+          <h3>Due Date Calculator</h3>
+          <p>Four modes: LMP, conception, IVF transfer, or ultrasound dating.</p>
+        </a>
+        <a href="/gestational-age-calculator/" class="card">
+          <div class="card-icon card-icon-mint"><Icon name="calendar" /></div>
+          <h3>Gestational Age Calculator</h3>
+          <p>How many weeks pregnant are you, and what week are you in?</p>
+        </a>
+        <a href="/ovulation-calculator/" class="card">
+          <div class="card-icon card-icon-peach"><Icon name="conception" /></div>
+          <h3>Ovulation Calculator</h3>
+          <p>Estimate your ovulation date and fertile window.</p>
+        </a>
+        <a href="/guides/" class="card">
+          <div class="card-icon card-icon-navy"><Icon name="book" /></div>
+          <h3>Pregnancy Guides</h3>
+          <p>Expert-reviewed guides covering every trimester and milestone.</p>
+        </a>
+      </div>
+    </div>
+  </section>
+</Base>

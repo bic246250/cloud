@@ -730,8 +730,8 @@ p {
   background: var(--off-white);
 }
 
-/* ===== AFFILIATE DISCLOSURE ===== */
-.affiliate-disclosure {
+/* ===== DISCLOSURE / DISCLAIMER BOX ===== */
+.disclosure-box {
   background: var(--peach-light);
   border: 1px solid var(--peach);
   border-radius: var(--radius);
@@ -746,7 +746,7 @@ p {
    4.5:1 AA threshold for normal text. */
 /* Scoped to :not(.btn) on purpose - a bare `.section-mint a` outranks
    `.btn-primary` (0,1,1 vs 0,1,0) and repaints button labels teal-on-teal. */
-.affiliate-disclosure a:not(.btn),
+.disclosure-box a:not(.btn),
 .section-mint a:not(.btn) {
   color: var(--teal-text-strong);
 }

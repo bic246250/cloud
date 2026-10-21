@@ -9,6 +9,8 @@ interface Props {
   type?: string;
   publishedTime?: string;
   tags?: string[];
+  breadcrumbs?: Array<{ name: string; url: string }>;
+  jsonLd?: Array<Record<string, unknown>>;
 }
 
 const {
@@ -19,20 +21,97 @@ const {
   type = 'website',
   publishedTime,
   tags = [],
+  breadcrumbs,
+  jsonLd: pageJsonLd = [],
 } = Astro.props;
 
 const siteTitle = 'Bump Compass';
 const fullTitle = title === 'Home' ? siteTitle : `${title} | ${siteTitle}`;
 const canonicalURL = canonical ? new URL(canonical, Astro.site) : new URL(Astro.url.pathname, Astro.site);
 const ogImage = new URL('/og-default.png', Astro.site);
+const isHome = Astro.url.pathname === '/';
 
-const jsonLd = {
-  '@context': 'https://schema.org',
+// WebSite node — declared on every page so a sitelinks search box can be
+// eligible site-wide; the id is referenced from other node types below.
+const websiteNode = {
   '@type': 'WebSite',
+  '@id': `${Astro.site}#website`,
   name: siteTitle,
   url: Astro.site,
-  description: 'Free pregnancy, baby, and breastfeeding tools and guides.',
+  // Only claim clusters that actually exist. Baby and breastfeeding are
+  // planned, not published — asserting them here would be false data.
+  description: 'Free pregnancy calculators and guides — gestational age, due dates, trimesters, ovulation, and more.',
+  inLanguage: 'en-US',
 };
+
+const publisherNode = {
+  '@type': 'Organization',
+  '@id': `${Astro.site}#organization`,
+  name: 'Bump Compass Editorial',
+  url: Astro.site,
+};
+
+// BreadcrumbList is derived from the pathname unless a page supplies an
+// explicit trail (guides need a human label for the middle crumb).
+const crumbTrail = breadcrumbs ?? defaultBreadcrumbs(Astro.url.pathname, title);
+function defaultBreadcrumbs(pathname: string, pageTitle: string) {
+  const trail: Array<{ name: string; url: string }> = [{ name: 'Home', url: '/' }];
+  const segments = pathname.split('/').filter(Boolean);
+  let acc = '';
+  for (let i = 0; i < segments.length; i++) {
+    acc += `/${segments[i]}`;
+    const isLast = i === segments.length - 1;
+    trail.push({
+      name: isLast ? pageTitle.replace(` | ${siteTitle}`, '') : titleCase(segments[i]),
+      url: acc + '/',
+    });
+  }
+  return trail;
+}
+function titleCase(segment: string) {
+  return segment.split('-').map((w) => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+}
+
+const breadcrumbNode = isHome
+  ? null
+  : {
+      '@type': 'BreadcrumbList',
+      '@id': `${canonicalURL.href}#breadcrumb`,
+      itemListElement: crumbTrail.map((crumb, i) => ({
+        '@type': 'ListItem',
+        position: i + 1,
+        name: crumb.name,
+        item: new URL(crumb.url, Astro.site).href,
+      })),
+    };
+
+// Article / MedicalWebPage node for content pages (guides). Built in the layout
+// so every guide gets the same well-formed node without duplicating it.
+const articleNode =
+  type === 'article'
+    ? {
+        '@type': 'Article',
+        '@id': `${canonicalURL.href}#article`,
+        headline: title,
+        description,
+        inLanguage: 'en-US',
+        datePublished: publishedTime ?? '2026-10-14',
+        isPartOf: { '@id': `${Astro.site}#website` },
+        author: { '@id': `${Astro.site}#organization` },
+        publisher: { '@id': `${Astro.site}#organization` },
+        image: ogImage.href,
+        articleSection: 'Pregnancy',
+        keywords: tags.join(', '),
+      }
+    : null;
+
+const jsonLdNodes: Array<Record<string, unknown>> = [
+  websiteNode,
+  publisherNode,
+  ...(breadcrumbNode ? [breadcrumbNode] : []),
+  ...(articleNode ? [articleNode] : []),
+  ...pageJsonLd,
+];
 ---
 
 <!doctype html>
@@ -65,8 +144,8 @@ const jsonLd = {
     <link rel="preload" href="/fonts/nunito-sans-latin.woff2" as="font" type="font/woff2" crossorigin />
 
     <!-- AdSense is loaded lazily, before </body>. See the loader at the end of the document. -->
-    <!-- JSON-LD -->
-    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+    <!-- JSON-LD: @graph of WebSite + Organization + BreadcrumbList + page nodes -->
+    <script type="application/ld+json" set:html={JSON.stringify({ '@context': 'https://schema.org', '@graph': jsonLdNodes })} />
   </head>
   <body>
     <header class="site-header">
@@ -160,6 +239,7 @@ const jsonLd = {
               <li><a href="/guides/gestational-age-explained/">Gestational Age Explained</a></li>
               <li><a href="/guides/due-date-explained/">Due Date Explained</a></li>
               <li><a href="/guides/pregnancy-test-timing/">Pregnancy Test Timing</a></li>
+              <li><a href="/guides/sleep-during-pregnancy/">Sleep During Pregnancy</a></li>
             </ul>
           </div>
           <div class="footer-col">
@@ -171,7 +251,6 @@ const jsonLd = {
               <li><a href="/privacy/">Privacy</a></li>
               <li><a href="/terms/">Terms</a></li>
               <li><a href="/disclaimer/">Disclaimer</a></li>
-              <li><a href="/affiliate-disclosure/">Affiliate Disclosure</a></li>
             </ul>
           </div>
         </div>

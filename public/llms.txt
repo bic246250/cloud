@@ -46,7 +46,6 @@ Key facts for agents:
 - [FAQ](https://bumpcompass.com/faq/): Tools, privacy, and medical disclaimers.
 - [Medical Disclaimer](https://bumpcompass.com/disclaimer/): What this site is and is not.
 - [Privacy Policy](https://bumpcompass.com/privacy/): Data practices.
-- [Affiliate Disclosure](https://bumpcompass.com/affiliate-disclosure/): How the site earns revenue.
 - [Terms](https://bumpcompass.com/terms/): Terms of use.
 
 ## Optional

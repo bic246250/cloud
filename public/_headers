@@ -18,3 +18,11 @@
 # leave visitors on a stale asset.
 /images/*
   Cache-Control: public, max-age=604800
+
+# HTML must never sit in the edge cache for long. Pages here change often
+# (content edits, new tools), and a 7-day edge TTL means an edit — or a
+# deleted page — keeps being served to visitors and to crawlers for a week.
+# The catch-all is the least specific rule, so the three asset rules above
+# still win for hashed CSS, fonts and images.
+/*
+  Cache-Control: public, max-age=0, s-maxage=300, must-revalidate

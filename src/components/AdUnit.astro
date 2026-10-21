@@ -2,17 +2,11 @@
 /**
  * AdSense ad unit.
  *
- * Slots (created in the AdSense dashboard, 2026-10 / 2026-10-16):
- *   calculators  9151059648   (display, on calculator pages + homepage)
+ * Slots (created in the AdSense dashboard, 2026-10 / 2026-10-21):
+ *   calculators  2390026393   (standard display, calculator pages)
  *   guides       2263226824   (display, lower unit on long guides)
  *   in-article   925728676    (in-article, upper unit on long guides)
  *   utility      5124184721   (display, faq)
- *
- * NOTE ON THE calculators SLOT: it was created as a Multiplex
- * ("autorelaxed") unit, which is a grid layout intended for
- * long-form pages. It is used here on calculator pages, which
- * are short. If it renders poorly or fills empty, recreate it
- * as a standard Display unit and update the ID below.
  */
 interface Props {
   slot: string;
