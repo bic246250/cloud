@@ -1,0 +1,28 @@
+# Source manifest - gestational-age-explained
+
+Guide: `src/pages/guides/gestational-age-explained.astro`
+Slug: `gestational-age-explained`
+Fetched: 2026-10-22
+
+## Sources
+
+- Pregnancy counted from the first day of the last menstrual period; a normal pregnancy lasts from 37 weeks to 42 weeks from that date - https://www.nhs.uk/pregnancy/finding-out/due-date-calculator/ - fetched 2026-10-22
+- The NHS due date calculator works from the first day of the last period; if you do not know it or are unsure, speak to a midwife or GP - https://www.nhs.uk/pregnancy/finding-out/due-date-calculator/ - fetched 2026-10-22
+- The 12-week dating scan estimates the due date from the baby's measurements; a due date originally calculated from the first day of the last period may be adjusted according to ultrasound measurements - https://www.nhs.uk/pregnancy/your-pregnancy-care/ultrasound-scans/ - fetched 2026-10-22
+- The 20-week scan is offered at 18 to 21 weeks and checks for signs of 11 different conditions as well as growth; in some cases it can be done up to 23 weeks - https://www.nhs.uk/pregnancy/your-pregnancy-care/20-week-scan/ - fetched 2026-10-22
+- NHS screening windows: before 10 weeks (sickle cell and thalassaemia); 8 to 12 weeks (hepatitis B, HIV, syphilis); 11 to 14 weeks (12-week scan and combined test); 14 to 20 weeks (quadruple test); 18 to 21 weeks (20-week scan) - https://www.nhs.uk/pregnancy/your-pregnancy-care/screening-tests/ - fetched 2026-10-22
+- At least 10 antenatal appointments for a first baby and at least 7 otherwise, plus 2 ultrasound scans; first midwife appointment at 8 to 12 weeks; 41 week appointment offered if still pregnant - https://www.nhs.uk/pregnancy/your-pregnancy-care/your-antenatal-care-and-appointments/ - fetched 2026-10-22
+- Ultrasound measurement of the embryo or fetus in the first trimester, up to and including 13 6/7 weeks of gestation, is the most accurate method to establish or confirm gestational age - https://www.acog.org/clinical/clinical-guidance/committee-opinion/articles/2017/05/methods-for-estimating-the-due-date - fetched 2026-10-22
+- If pregnancy resulted from assisted reproductive technology, the ART-derived gestational age should be used to assign the estimated due date; for IVF the due date is assigned using the age of the embryo and the date of transfer - https://www.acog.org/clinical/clinical-guidance/committee-opinion/articles/2017/05/methods-for-estimating-the-due-date - fetched 2026-10-22
+- Gestational age and the estimated due date should be determined and documented as soon as the LMP date, the first accurate ultrasound, or both are available; subsequent changes to the due date should be reserved for rare circumstances - https://www.acog.org/clinical/clinical-guidance/committee-opinion/articles/2017/05/methods-for-estimating-the-due-date - fetched 2026-10-22
+- A pregnancy without an ultrasound examination that confirms or revises the estimated due date before 22 0/7 weeks of gestational age should be considered suboptimally dated - https://www.acog.org/clinical/clinical-guidance/committee-opinion/articles/2017/05/methods-for-estimating-the-due-date - fetched 2026-10-22
+
+## Notes
+
+- Em-dash defect: a full-file scan (grep for U+2014, U+2013, curly quotes) on the pre-edit file returned no matches. The file contained no em dashes or curly quotes before editing, and none were introduced. Lint confirms zero hits for this guide.
+- Candidate URLs given in the task under the path `/pregnancy/your-antenatal-care/...` all returned HTTP 404 (the NHS path is `/pregnancy/your-pregnancy-care/...`). Replaced with the correct `/pregnancy/your-pregnancy-care/...` URLs, all of which returned content. `https://www.nhs.uk/pregnancy/your-antenatal-care/` also returned 404.
+- ACOG page: plain `web_extract` returns the abstract, the recommendations list and the introduction. The full body, including the per-trimester discrepancy cutoffs and the accuracy figures, is also retrievable, but only beyond the default truncation window (the page is about 15,400 characters and the cutoffs sit in the omitted middle). During parent review the full cached text was read and the cutoffs were confirmed verbatim: "If ultrasound dating before 14 0/7 weeks of gestation differs by more than 7 days from LMP dating, the EDD should be changed to correspond with the ultrasound dating", with a tighter 5-day threshold before 9 0/7 weeks, and per-trimester accuracy of plus or minus 5 to 7 days (first), 7 to 10 days (second) and 21 to 30 days (third).
+- Correction made during parent review: the pre-existing accuracy-by-trimester table stated plus or minus 5 days, 8 to 14 days and 21 to 28 days, and described third-trimester dating as "too unreliable to redate". These did not match ACOG. The table now states ACOG's figures (5 to 7, 7 to 10, 21 to 30 days) and notes that the due date is changed in the third trimester only if the discrepancy exceeds 21 days. The 7-day rule is now stated with ACOG's exact thresholds and cited to the ACOG URL.
+- Omission: no fetched source in this set defines viability (for example a gestational-age threshold for viability). That element of the requested outline was therefore left out rather than asserted without a citation.
+- The two-week offset statements (2 weeks at conception, 4 weeks at a missed period, 40 weeks vs 38 weeks) are retained from the original guide as existing content and are attributed to the NHS due-date convention sources.
+- Existing content preserved: both formulas, the worked cycle-correction example, the gestational-vs-fetal-age table, the accuracy-by-trimester table, and the disclosure box.
