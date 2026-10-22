@@ -23,7 +23,10 @@ for (const slug of slugs) {
   // rejected candidate are provenance, not citations, so skip them.
   const urls = [];
   for (const line of md.split('\n')) {
-    if (/\b(404|ERR|not used|failed|dead|unreachable|not returning)\b/i.test(line)) continue;
+    // The mandated format is: - <claim> — <URL> — fetched <date>.
+    // Only lines carrying that marker are live citations. Notes and
+    // dead-candidate lists are provenance and are not link-checked.
+    if (!/\bfetched\b/i.test(line)) continue;
     for (const m of line.matchAll(/https?:\/\/[^\s)>"']+/g)) urls.push(m[0]);
   }
   urls.forEach(u => allUrls.add(u));
