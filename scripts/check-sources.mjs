@@ -24,10 +24,10 @@ for (const slug of slugs) {
   const urls = [];
   for (const line of md.split('\n')) {
     // The mandated format is: - <claim> — <URL> — fetched <date>.
-    // Only lines carrying that marker are live citations. Notes and
-    // dead-candidate lists are provenance and are not link-checked.
-    if (!/\bfetched\b/i.test(line)) continue;
-    for (const m of line.matchAll(/https?:\/\/[^\s"']+/g)) {
+    // Require "fetched" followed by a date, so Notes prose that merely mentions
+    // the word "fetched" is not mistaken for a citation line.
+    if (!/\bfetched\s+\d/i.test(line)) continue;
+    for (const m of line.matchAll(/https?:\/\/[^\s"'`]+/g)) {
       let u = m[0].replace(/[.,;:]+$/, '');
       // URLs can legitimately end in a closing paren (e.g. WHO tag-gwg pages);
       // only strip trailing parens that are unbalanced.
