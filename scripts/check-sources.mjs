@@ -19,7 +19,13 @@ for (const slug of slugs) {
   const p = join(SRC_DIR, `${slug}.md`);
   if (!existsSync(p)) { console.log(`MISSING manifest: ${p}`); fail++; continue; }
   const md = readFileSync(p, 'utf8');
-  const urls = [...md.matchAll(/https?:\/\/[^\s)>"']+/g)].map(m => m[0]);
+  // Only treat URLs as live citations. Lines that explicitly record a dead or
+  // rejected candidate are provenance, not citations, so skip them.
+  const urls = [];
+  for (const line of md.split('\n')) {
+    if (/\b(404|ERR|not used|failed|dead|unreachable|not returning)\b/i.test(line)) continue;
+    for (const m of line.matchAll(/https?:\/\/[^\s)>"']+/g)) urls.push(m[0]);
+  }
   urls.forEach(u => allUrls.add(u));
   const ok = urls.length >= 5;
   if (!ok) fail++;
