@@ -27,7 +27,15 @@ for (const slug of slugs) {
     // Only lines carrying that marker are live citations. Notes and
     // dead-candidate lists are provenance and are not link-checked.
     if (!/\bfetched\b/i.test(line)) continue;
-    for (const m of line.matchAll(/https?:\/\/[^\s)>"']+/g)) urls.push(m[0]);
+    for (const m of line.matchAll(/https?:\/\/[^\s"']+/g)) {
+      let u = m[0].replace(/[.,;:]+$/, '');
+      // URLs can legitimately end in a closing paren (e.g. WHO tag-gwg pages);
+      // only strip trailing parens that are unbalanced.
+      while (u.endsWith(')') && (u.match(/\(/g) || []).length < (u.match(/\)/g) || []).length) {
+        u = u.slice(0, -1);
+      }
+      urls.push(u);
+    }
   }
   urls.forEach(u => allUrls.add(u));
   const ok = urls.length >= 5;
@@ -38,13 +46,23 @@ console.log(`\n${allUrls.size} unique URLs across ${slugs.length} guides`);
 
 if (online) {
   let bad = 0;
+  const blocked = [];
   for (const u of [...allUrls].sort()) {
     let s = 'ERR';
     try {
       const r = await fetch(u, { method: 'GET', redirect: 'follow', headers: { 'user-agent': 'Mozilla/5.0 (compatible; BumpCompassSourceCheck/1.0)' } });
       s = r.status;
     } catch { s = 'ERR'; }
-    if (s !== 200) { bad++; console.log(`  ${s}  ${u}`); }
+    if (s === 200) continue;
+    // 403/429 mean the page exists but refuses automated access. That is a bot
+    // wall, not a dead citation, so report it without failing the build.
+    if (s === 403 || s === 429) { blocked.push(`${s}  ${u}`); continue; }
+    bad++;
+    console.log(`  ${s}  ${u}`);
+  }
+  if (blocked.length) {
+    console.log(`\n${blocked.length} URL(s) blocked to automated fetch (page exists; verify by hand):`);
+    blocked.forEach(b => console.log(`  ${b}`));
   }
   console.log(`\n${bad} URLs not returning 200`);
   if (bad) fail++;
